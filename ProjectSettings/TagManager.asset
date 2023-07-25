@@ -8,6 +8,7 @@ TagManager:
   - Player2
   - Obstacles
   - ball
+  - Ground
   layers:
   - Default
   - TransparentFX
@@ -16,9 +17,9 @@ TagManager:
   - Water
   - UI
   - 
-  - 
+  - Ground
   - Obstacles
-  - 
+  - Enemy
   - 
   - 
   - 

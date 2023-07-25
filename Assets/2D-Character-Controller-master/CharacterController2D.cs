@@ -29,6 +29,7 @@ public class CharacterController2D : MonoBehaviour
 
 	public BoolEvent OnCrouchEvent;
 	private bool m_wasCrouching = false;
+	private bool always_erect = true;
 
 	private void Awake()
 	{
@@ -57,6 +58,13 @@ public class CharacterController2D : MonoBehaviour
 				if (!wasGrounded)
 					OnLandEvent.Invoke();
 			}
+		}
+
+		// The player alway erect if always_erect is true
+		if (always_erect)
+		{
+			// set rotation to 0
+			transform.rotation = Quaternion.Euler(0, 0, 0);
 		}
 	}
 

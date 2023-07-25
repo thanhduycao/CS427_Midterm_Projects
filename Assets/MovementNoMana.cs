@@ -40,7 +40,7 @@ public class MovementNoMana : MonoBehaviour
         {
             movement = -movementSpeed;
         }
-        if (Input.GetKeyDown(KeyCode.W))
+        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space))
         {
             jump = true;
             animator.SetBool("isJumping", true);
