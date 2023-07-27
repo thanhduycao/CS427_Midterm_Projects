@@ -8,6 +8,8 @@ public class MovementNoMana : MonoBehaviour
 
     Animator animator;
 
+    Rigidbody2D rb;
+
     public float movementSpeed;
 
     public int playerNumber;
@@ -18,6 +20,8 @@ public class MovementNoMana : MonoBehaviour
     public float movement = 0f;
 
     bool jump = false;
+    bool fall = false;
+    bool onLanded = true;
 
     public string Sname;
     // Start is called before the first frame update
@@ -25,6 +29,7 @@ public class MovementNoMana : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         contrller = GetComponent<CharacterController2D>();
+        rb = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
@@ -43,7 +48,18 @@ public class MovementNoMana : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.W))
         {
             jump = true;
+            onLanded = false;
             animator.SetBool("isJumping", true);
+        }
+        if (rb.velocity.y < -.3f)
+        {
+            jump = false;
+            animator.SetBool("isJumping", false);
+            if (fall == false && onLanded == false)
+            {
+                fall = true;
+                animator.SetBool("isFalling", true);
+            }
         }
         if (Input.GetKeyDown(KeyCode.D)) { MusicManager.findMusic(Sname); }
         if (Input.GetKeyDown(KeyCode.A)) { MusicManager.findMusic(Sname); }
@@ -53,15 +69,16 @@ public class MovementNoMana : MonoBehaviour
 
     public void OnLanding()
     {
-        animator.SetBool("isJumping", false);
+        // animator.SetBool("isJumping", false);
+        if (rb.velocity.y < 0)
+        {
+            animator.SetBool("isFalling", false);
+            onLanded = true;
+            fall = false;
+        }
     }
     void FixedUpdate()
     {
-        /* if (Mathf.Abs(movement) > 0)
-        {
-            contrller.Move(movement * Time.fixedDeltaTime, false, jump);
-            jump = false;
-        } */
         contrller.Move(movement * Time.fixedDeltaTime, false, jump);
         jump = false;
     }

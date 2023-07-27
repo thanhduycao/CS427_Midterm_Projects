@@ -33,4 +33,10 @@ public class ReduceHealth : MonoBehaviour
         currentHealth -= damage;
         healthBar.setHealth(currentHealth);
     }
+
+    public void takeAllDamage()
+    {
+        currentHealth = 0;
+        healthBar.setHealth(currentHealth);
+    }
 }

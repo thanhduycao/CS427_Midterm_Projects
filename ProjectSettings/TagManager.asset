@@ -8,6 +8,7 @@ TagManager:
   - Player2
   - Obstacles
   - ball
+  - Apple
   layers:
   - Default
   - TransparentFX
