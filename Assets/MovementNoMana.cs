@@ -77,6 +77,12 @@ public class MovementNoMana : MonoBehaviour
             fall = false;
         }
     }
+    
+    public void OnHit(bool hit)
+    {
+        animator.SetBool("isHit", hit);
+    }
+
     void FixedUpdate()
     {
         contrller.Move(movement * Time.fixedDeltaTime, false, jump);

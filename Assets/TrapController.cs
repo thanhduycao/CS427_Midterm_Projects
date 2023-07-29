@@ -11,7 +11,6 @@ public class TrapController : MonoBehaviour
 
     public int getDamage()
     {
-        Debug.Log("Trap Damage: " + damage);
         return damage;
     }
 
