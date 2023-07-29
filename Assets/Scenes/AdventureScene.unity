@@ -616,6 +616,7 @@ GameObject:
   - component: {fileID: 791719407}
   - component: {fileID: 791719409}
   - component: {fileID: 791719412}
+  - component: {fileID: 791719416}
   - component: {fileID: 791719410}
   - component: {fileID: 791719413}
   - component: {fileID: 791719414}
@@ -745,7 +746,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &791719410
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -761,7 +762,7 @@ MonoBehaviour:
   m_JumpForce: 700
   m_CrouchSpeed: 0.36
   m_MovementSmoothing: 0.05
-  m_AirControl: 0
+  m_AirControl: 1
   m_WhatIsGround:
     serializedVersion: 2
     m_Bits: 256
@@ -880,6 +881,18 @@ MonoBehaviour:
   healthBar: {fileID: 21599173}
   player1: {fileID: 0}
   player2: {fileID: 0}
+--- !u!114 &791719416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 791719405}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e35d87ac3cadf1478c0aeab3d08ad53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &935906785
 GameObject:
   m_ObjectHideFlags: 0
@@ -1111,7 +1124,8 @@ GameObject:
   - component: {fileID: 1183043865}
   - component: {fileID: 1183043864}
   - component: {fileID: 1183043866}
-  m_Layer: 0
+  - component: {fileID: 1183043867}
+  m_Layer: 8
   m_Name: Spikes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1162,7 +1176,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0.0041458085, y: -0.04353023}
@@ -1242,8 +1256,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86ada84bf2ed42e429e91266745f67c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Sname: 
+  Sname: 2 traps
   damage: 20
+--- !u!114 &1183043867
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1183043862}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4941c10a2409844e8fc47beb5996612, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1395574715
 GameObject:
   m_ObjectHideFlags: 0

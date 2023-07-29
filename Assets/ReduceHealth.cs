@@ -17,16 +17,13 @@ public class ReduceHealth : MonoBehaviour
         healthBar.setMaxHealth(maxHealth);
     }
 
-    /*private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (CameraController2.currentPlayer == 1)
+        if (collision.TryGetComponent(out Trap trap))
         {
-            if (collision.transform.tag == "ball")
-            {
-                takeDamage(20);
-            }
+            takeDamage(collision.GetComponent<TrapController>().getDamage());
         }
-    }*/
+    }
 
     public void takeDamage(int damage)
     {

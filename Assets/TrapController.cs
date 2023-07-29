@@ -4,20 +4,19 @@ using UnityEngine;
 
 public class TrapController : MonoBehaviour
 {
-    public string Sname;
-    public int damage = 20;
+    [Header("Trap Name")]
+    [SerializeField] public string Sname;
+    [Header("Trap Damage")]
+    [SerializeField] public int damage = 20;
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    public int getDamage()
     {
-        if (collision.transform.tag == "Player")
-        {
-            if (gameObject.tag == "Dead Trap")
-            {
-                collision.gameObject.GetComponent<ReduceHealth>().takeAllDamage();
-            } else if (gameObject.tag == "Normal Trap")
-            {
-                collision.gameObject.GetComponent<ReduceHealth>().takeDamage(damage);
-            }
-        }
+        Debug.Log("Trap Damage: " + damage);
+        return damage;
+    }
+
+    public void setDame(int damage)
+    {
+        this.damage = damage;
     }
 }
