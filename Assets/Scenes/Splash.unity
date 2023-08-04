@@ -254,6 +254,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _authManager: {fileID: 98575724}
+  _loadingText: {fileID: 0}
 --- !u!1 &792250575
 GameObject:
   m_ObjectHideFlags: 0
