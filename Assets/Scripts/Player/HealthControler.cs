@@ -17,6 +17,17 @@ public class HealthControler : MonoBehaviour
         healthBar.SetHealth(currentHealth);
     }
 
+    public void SetHealth(int health)
+    {
+        healthBar.SetHealth(health);
+        currentHealth = health;
+    }
+
+    public int GetHealth()
+    {
+        return currentHealth;
+    }
+
     public void TakeDamage(int amount)
     {
         currentHealth -= amount;
