@@ -6,16 +6,22 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Splash.unity
-    guid: e246e386ea866404e8b2b715c32b32af
+    path: Assets/Scenes/MainMenu.unity
+    guid: 71f2695086f228c47a9befe23dac0888
   - enabled: 1
     path: Assets/Scenes/Lobby.unity
     guid: 7a898fe878fa8314aad3886e32e7e05c
+  - enabled: 1
+    path: Assets/Scenes/AdventureIntro.unity
+    guid: 94dd87387d8170f40aab42c0ab482711
   - enabled: 1
     path: Assets/Scenes/Round1.unity
     guid: 861c71144b5eabb4581cf0f7f937dfb2
   - enabled: 1
     path: Assets/Scenes/Round2.unity
     guid: 8059d78932082b8449c3249824228fc7
+  - enabled: 0
+    path: Assets/Scenes/Splash.unity
+    guid: e246e386ea866404e8b2b715c32b32af
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: 33b61bf2555bbc8459604aa329d43e60, type: 2}
