@@ -1,0 +1,27 @@
+fileFormatVersion: 2
+guid: f6eda59d40abfc24dbb57cf0fd8e2b9f
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: cc34d0f3dc257a442819830b408c5322, type: 3}
+  missingFiles: []
+  errors:
+  - Could not generate asset path for 'C:/Users/LAP12418-local/Downloads/[Free]Fantasy_Swamp_Forest/Fantasy
+    Swamp Forest/Free/Terrain_and_Props.png'
+  - 'Missing texture asset: C:/Users/LAP12418-local/Downloads/[Free]Fantasy_Swamp_Forest/Fantasy
+    Swamp Forest/Free/Terrain_and_Props.png'
+  warnings: []
+  missingSortingLayers: []
+  missingLayers: []
+  missingTags: []
+  importerVersion: 13
+  pixelsPerUnit: 100
+  edgesPerEllipse: 32
+  numberOfObjectsImported: 2
+  useSpriteAtlas: 1
+  atlasWidth: 2048
+  atlasHeight: 2048

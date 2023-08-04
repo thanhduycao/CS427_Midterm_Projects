@@ -318,7 +318,6 @@ MonoBehaviour:
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
   SceneMigrationSynchronization: 1
-  SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
 --- !u!114 &602124496
@@ -334,6 +333,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerPrefab: {fileID: 1546822854463175675, guid: c1ad0b54a4288be469732c018e15974a, type: 3}
+  _spawnStartY: 0
+  _spawnEndY: 0
+  _spawnStartX: 0
+  _spawnEndX: 1
 --- !u!4 &602124497
 Transform:
   m_ObjectHideFlags: 0
@@ -494,7 +497,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1065795075
 Transform:
   m_ObjectHideFlags: 0
