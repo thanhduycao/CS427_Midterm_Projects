@@ -2,6 +2,7 @@ using Unity.Netcode;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using QFSW.QC;
 
 public class MainMenuManager : MonoBehaviour
 {
@@ -42,6 +43,20 @@ public class MainMenuManager : MonoBehaviour
     public void OnClickPlayOffline()
     {
         NetworkManager.Singleton.StartHost();
+        NetworkManager.Singleton.SceneManager.LoadScene(Constants.Rounds[0], LoadSceneMode.Single);
+    }
+
+    [Command("StartHost")]
+    public void StartHost()
+    {
+        NetworkManager.Singleton.StartHost();
+        NetworkManager.Singleton.SceneManager.LoadScene(Constants.Rounds[0], LoadSceneMode.Single);
+    }
+    
+    [Command("StartClient")]
+    public void StartClient()
+    {
+        NetworkManager.Singleton.StartClient();
         NetworkManager.Singleton.SceneManager.LoadScene(Constants.Rounds[0], LoadSceneMode.Single);
     }
 }
