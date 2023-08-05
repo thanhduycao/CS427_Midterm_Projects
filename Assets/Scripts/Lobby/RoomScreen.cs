@@ -80,7 +80,7 @@ public class RoomScreen : MonoBehaviour {
         LobbyLeft?.Invoke();
     }
 
-    private void NetworkLobbyPlayersUpdated(Dictionary<ulong, LobbyPlayerData> players) {
+    private void NetworkLobbyPlayersUpdated(Dictionary<ulong, PlayerData> players) {
         var allActivePlayerIds = players.Keys;
 
         // Remove all inactive panels

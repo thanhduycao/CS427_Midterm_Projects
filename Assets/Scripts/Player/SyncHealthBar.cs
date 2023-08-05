@@ -4,10 +4,12 @@ using UnityEngine;
 public class SyncHealthBar : NetworkBehaviour
 {
     private HealthControler m_HealControler;
+    private PlayersTracking m_PlayersTracking;
 
     private void Awake()
     {
         m_HealControler = GetComponent<HealthControler>();
+        m_PlayersTracking = FindObjectOfType<PlayersTracking>();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -45,6 +47,10 @@ public class SyncHealthBar : NetworkBehaviour
     private void UpdateHealthServerRpc(int newHealth)
     {
         m_HealControler.SetHealth(newHealth);
+        if (m_PlayersTracking != null)
+        {
+            m_PlayersTracking.UpdatePlayerHealth(OwnerClientId, newHealth);
+        }
         UpdateHealthClientRpc(newHealth);
     }
 
@@ -52,5 +58,11 @@ public class SyncHealthBar : NetworkBehaviour
     private void UpdateHealthClientRpc(int newHealth)
     {
         m_HealControler.SetHealth(newHealth);
+        if (m_PlayersTracking == null)
+            m_PlayersTracking = FindObjectOfType<PlayersTracking>();
+        if (m_PlayersTracking != null)
+        {
+            m_PlayersTracking.UpdatePlayerHealth(OwnerClientId, newHealth);
+        }
     }
 }
