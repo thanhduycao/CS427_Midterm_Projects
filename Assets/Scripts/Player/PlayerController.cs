@@ -21,7 +21,6 @@ public class PlayerController : NetworkBehaviour
     private bool m_Grounded;            // Whether or not the player is grounded.
     const float k_CeilingRadius = .2f; // Radius of the overlap circle to determine if the player can stand up
     private Rigidbody2D m_Rigidbody2D;
-    private HealthControler m_HealControler;
     private bool m_FacingRight = true;  // For determining which way the player is currently facing.
     private Vector3 m_Velocity = Vector3.zero;
 
@@ -38,7 +37,6 @@ public class PlayerController : NetworkBehaviour
     private void Awake()
     {
         m_Rigidbody2D = GetComponent<Rigidbody2D>();
-        m_HealControler = GetComponent<HealthControler>();
 
         if (OnLandEvent == null)
             OnLandEvent = new UnityEvent();
@@ -166,49 +164,5 @@ public class PlayerController : NetworkBehaviour
         Vector3 theScale = m_PlayerTransform.localScale;
         theScale.x *= -1;
         m_PlayerTransform.localScale = theScale;
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.TryGetComponent(out Trap _))
-        {
-            var trap = collision.gameObject.GetComponent<TrapController>();
-            int newHeal = TakeDamage(trap.Damage);
-            if (IsOwner)
-            {
-                if (IsServer)
-                {
-                    UpdateHealthClientRpc(newHeal);
-                }
-                else
-                {
-                    UpdateHealthServerRpc(newHeal);
-                }
-            }
-            else
-            {
-                if (IsServer) return;
-                UpdateHealthClientRpc(newHeal);
-            }
-        }
-    }
-
-    private int TakeDamage(int dame)
-    {
-        return m_HealControler.GetHealth() - dame;
-    }
-
-    // make Request Collision ServerRpc and ClientRpc   
-    [ServerRpc]
-    private void UpdateHealthServerRpc(int newHealth)
-    {
-        m_HealControler.SetHealth(newHealth);
-        UpdateHealthClientRpc(newHealth);
-    }
-
-    [ClientRpc]
-    private void UpdateHealthClientRpc(int newHealth)
-    {
-        m_HealControler.SetHealth(newHealth);
     }
 }
