@@ -6,7 +6,7 @@ public class CurrenPlayerData : MonoBehaviour
 {
     public static CurrenPlayerData Instance { get; private set; }
 
-    public LobbyPlayerData currentPlayerData;
+    public PlayerData currentPlayerData;
 
     public void Awake()
     {
@@ -14,7 +14,7 @@ public class CurrenPlayerData : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            currentPlayerData = new LobbyPlayerData();
+            currentPlayerData = new PlayerData();
         }
         else
         {
@@ -37,7 +37,7 @@ public class CurrenPlayerData : MonoBehaviour
         currentPlayerData.ready = ready;
     }
 
-    public void SetPlayerData(LobbyPlayerData data)
+    public void SetPlayerData(PlayerData data)
     {
         currentPlayerData = data;
     }

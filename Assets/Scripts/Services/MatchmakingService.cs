@@ -24,7 +24,7 @@ public static class MatchmakingService {
     }
 
     public static event Action<Lobby> CurrentLobbyRefreshed;
-    public static readonly Dictionary<ulong, LobbyPlayerData> _playersInLobby = new();
+    public static readonly Dictionary<ulong, PlayerData> _playersInLobby = new();
 
     public static void ResetStatics() {
         if (Transport != null) {
