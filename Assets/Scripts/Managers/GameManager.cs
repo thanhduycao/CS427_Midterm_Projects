@@ -7,7 +7,8 @@ public class GameManager : NetworkBehaviour
     [Header("Player")]
     [SerializeField] private PlayerController _playerPrefab;
 
-    [Header("Spawn Points")]
+    [Header("Spawn Area")]
+    [SerializeField] Transform _spawnArea;
     [SerializeField] private float _spawnStartY = 0f;
     [SerializeField] private float _spawnEndY = 0f;
     [SerializeField] private float _spawnStartX = 0f;
@@ -17,6 +18,17 @@ public class GameManager : NetworkBehaviour
     [SerializeField] private PlayersTracking _PlayersTracking;
 
     private readonly Dictionary<ulong, PlayerData> m_PlayerData = new();
+
+    private void Awake()
+    {
+        if (_spawnArea != null)
+        {
+            _spawnStartY = _spawnArea.position.y - _spawnArea.localScale.y / 2;
+            _spawnEndY = _spawnArea.position.y + _spawnArea.localScale.y / 2;
+            _spawnStartX = _spawnArea.position.x - _spawnArea.localScale.x / 2;
+            _spawnEndX = _spawnArea.position.x + _spawnArea.localScale.x / 2;
+        }
+    }
 
     private void Start()
     {
