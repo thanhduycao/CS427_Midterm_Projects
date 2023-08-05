@@ -4,7 +4,7 @@ using UnityEngine;
 public class PlayerData : INetworkSerializable
 {
     public ulong id = 0;
-    public string name = PlayerPrefs.GetString("PlayerName", "Player");
+    public string name = NVJOBNameGen.Uppercase(NVJOBNameGen.GiveAName(7));
     public Color color = Color.white;
     public bool ready = false;
 
@@ -25,14 +25,5 @@ public class PlayerData : INetworkSerializable
         ready = _ready;
     }
 
-    public PlayerData()
-    {
-        string colorString = PlayerPrefs.GetString("PlayerColor", Color.white.ToString());
-        try
-        {
-            ColorUtility.TryParseHtmlString(colorString, out Color _color);
-            color = _color;
-        }
-        catch (System.Exception) { }
-    }
+    public PlayerData() { }
 }

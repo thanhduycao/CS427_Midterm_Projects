@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Unity.Netcode;
 using Unity.Services.Lobbies.Models;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -16,14 +17,16 @@ public class LobbyOrchestrator : NetworkBehaviour
     [SerializeField] private MainLobbyScreen _mainLobbyScreen;
     [SerializeField] private CreateLobbyScreen _createScreen;
     [SerializeField] private RoomScreen _roomScreen;
+    [SerializeField] private PlayerSetting _playerSetting;
 
     private LobbyData _lobby;
 
     private void Start()
     {
-        _mainLobbyScreen.gameObject.SetActive(true);
+        _mainLobbyScreen.gameObject.SetActive(false);
         _createScreen.gameObject.SetActive(false);
         _roomScreen.gameObject.SetActive(false);
+        _playerSetting.gameObject.SetActive(true);
 
         CreateLobbyScreen.LobbyCreated += CreateLobby;
         LobbyRoomPanel.LobbySelected += OnLobbySelected;
