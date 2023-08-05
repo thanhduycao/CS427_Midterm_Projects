@@ -4,6 +4,7 @@ public class HealthControler : MonoBehaviour
 {
     [SerializeField] private int currentHealth = 100;
     [SerializeField] private HealthBar healthBar;
+    [SerializeField] private TMPro.TMP_Text playerName;
 
     private readonly int maxHealth = 100;
 
@@ -58,5 +59,10 @@ public class HealthControler : MonoBehaviour
     {
         currentHealth = maxHealth;
         healthBar.SetHealth(currentHealth);
+    }
+
+    public void SetPlayerName(string name)
+    {
+        playerName.text = name;
     }
 }

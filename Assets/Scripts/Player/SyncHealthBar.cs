@@ -3,13 +3,49 @@ using UnityEngine;
 
 public class SyncHealthBar : NetworkBehaviour
 {
+    [SerializeField] private float _RefreshRate = 2;
+
     private HealthControler m_HealControler;
     private PlayersTracking m_PlayersTracking;
+    private float _nextRefreshTime;
 
     private void Awake()
     {
         m_HealControler = GetComponent<HealthControler>();
         m_PlayersTracking = FindObjectOfType<PlayersTracking>();
+    }
+
+    private void Update()
+    {
+        if (Time.time >= _nextRefreshTime) Fetch();
+    }
+
+    private void Fetch()
+    {
+        _nextRefreshTime = Time.time + _RefreshRate;
+
+        PlayerData _playerData = FindObjectOfType<GameManager>()?.GetPlayerData(OwnerClientId);
+        if (_playerData != null)
+        {
+            m_HealControler.SetPlayerName(_playerData.name);
+        }
+
+        if (IsOwner)
+        {
+            if (IsServer)
+            {
+                UpdateHealthClientRpc(m_HealControler.GetHealth());
+            }
+            else
+            {
+                UpdateHealthServerRpc(m_HealControler.GetHealth());
+            }
+        }
+        else
+        {
+            if (IsServer) return;
+            UpdateHealthClientRpc(m_HealControler.GetHealth());
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
