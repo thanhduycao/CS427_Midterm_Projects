@@ -447,6 +447,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentHealth: 70
   healthBar: {fileID: 6193715411663674563}
+  playerName: {fileID: 9098851641827737682}
 --- !u!114 &7188048688762975323
 MonoBehaviour:
   m_ObjectHideFlags: 0

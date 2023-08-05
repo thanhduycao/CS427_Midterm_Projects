@@ -38,9 +38,18 @@ public class GameManager : NetworkBehaviour
         base.OnNetworkSpawn();
     }
 
-    public Dictionary<ulong, PlayerData> GetPlayerData()
+    public Dictionary<ulong, PlayerData> GetPlayersData()
     {
         return m_PlayerData;
+    }
+
+    public PlayerData GetPlayerData(ulong clientId)
+    {
+        if (m_PlayerData.ContainsKey(clientId))
+        {
+            return m_PlayerData[clientId];
+        }
+        return null;
     }
 
     [ServerRpc(RequireOwnership = false)]
