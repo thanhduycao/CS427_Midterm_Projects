@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Unity.Netcode;
 using Unity.Services.Lobbies.Models;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -16,14 +17,16 @@ public class LobbyOrchestrator : NetworkBehaviour
     [SerializeField] private MainLobbyScreen _mainLobbyScreen;
     [SerializeField] private CreateLobbyScreen _createScreen;
     [SerializeField] private RoomScreen _roomScreen;
+    [SerializeField] private PlayerSetting _playerSetting;
 
     private LobbyData _lobby;
 
     private void Start()
     {
-        _mainLobbyScreen.gameObject.SetActive(true);
+        _mainLobbyScreen.gameObject.SetActive(false);
         _createScreen.gameObject.SetActive(false);
         _roomScreen.gameObject.SetActive(false);
+        _playerSetting.gameObject.SetActive(true);
 
         CreateLobbyScreen.LobbyCreated += CreateLobby;
         LobbyRoomPanel.LobbySelected += OnLobbySelected;
@@ -89,8 +92,7 @@ public class LobbyOrchestrator : NetworkBehaviour
 
     #region Room
 
-    // private readonly Dictionary<ulong, LobbyPlayerData> _playersInLobby = new();
-    public static event Action<Dictionary<ulong, LobbyPlayerData>> LobbyPlayersUpdated;
+    public static event Action<Dictionary<ulong, PlayerData>> LobbyPlayersUpdated;
     private float _nextLobbyUpdate;
 
     public override void OnNetworkSpawn()
@@ -98,7 +100,7 @@ public class LobbyOrchestrator : NetworkBehaviour
         if (IsServer)
         {
             NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnectedCallback;
-            MatchmakingService._playersInLobby.Add(NetworkManager.Singleton.LocalClientId, new LobbyPlayerData());
+            MatchmakingService._playersInLobby.Add(NetworkManager.Singleton.LocalClientId, new PlayerData(NetworkManager.Singleton.LocalClientId));
             UpdateInterface();
         }
 
@@ -111,7 +113,7 @@ public class LobbyOrchestrator : NetworkBehaviour
         if (!IsServer) return;
 
         // Add locally
-        if (!MatchmakingService._playersInLobby.ContainsKey(playerId)) MatchmakingService._playersInLobby.Add(playerId, new LobbyPlayerData());
+        if (!MatchmakingService._playersInLobby.ContainsKey(playerId)) MatchmakingService._playersInLobby.Add(playerId, new PlayerData(NetworkManager.Singleton.LocalClientId));
 
         PropagateToClients();
         UpdateInterface();
@@ -123,11 +125,11 @@ public class LobbyOrchestrator : NetworkBehaviour
     }
 
     [ClientRpc]
-    private void UpdatePlayerClientRpc(ulong clientId, LobbyPlayerData _playerValue)
+    private void UpdatePlayerClientRpc(ulong clientId, PlayerData _playerValue)
     {
         if (IsServer) return;
 
-        if (!MatchmakingService._playersInLobby.ContainsKey(clientId)) MatchmakingService._playersInLobby.Add(clientId, new LobbyPlayerData());
+        if (!MatchmakingService._playersInLobby.ContainsKey(clientId)) MatchmakingService._playersInLobby.Add(clientId, new PlayerData(NetworkManager.Singleton.LocalClientId));
         else MatchmakingService._playersInLobby[clientId] = _playerValue;
         UpdateInterface();
     }
@@ -176,7 +178,7 @@ public class LobbyOrchestrator : NetworkBehaviour
     private void SetReadyServerRpc(ulong playerId)
     {
         if (MatchmakingService._playersInLobby.ContainsKey(playerId)) MatchmakingService._playersInLobby[playerId].ready = true;
-        else MatchmakingService._playersInLobby.Add(playerId, new LobbyPlayerData(_ready: true));
+        else MatchmakingService._playersInLobby.Add(playerId, new PlayerData(_id: playerId, _ready: true));
 
         PropagateToClients();
         UpdateInterface();
@@ -191,7 +193,7 @@ public class LobbyOrchestrator : NetworkBehaviour
     private void SetNameServerRpc(ulong playerId, string name)
     {
         if (MatchmakingService._playersInLobby.ContainsKey(playerId)) MatchmakingService._playersInLobby[playerId].name = name;
-        else MatchmakingService._playersInLobby.Add(playerId, new LobbyPlayerData(_name: name));
+        else MatchmakingService._playersInLobby.Add(playerId, new PlayerData(_id: playerId, _name: name));
 
         PropagateToClients();
         UpdateInterface();
@@ -206,7 +208,7 @@ public class LobbyOrchestrator : NetworkBehaviour
     private void SetColorServerRpc(ulong playerId, Color color)
     {
         if (MatchmakingService._playersInLobby.ContainsKey(playerId)) MatchmakingService._playersInLobby[playerId].color = color;
-        else MatchmakingService._playersInLobby.Add(playerId, new LobbyPlayerData(_color: color));
+        else MatchmakingService._playersInLobby.Add(playerId, new PlayerData(_id: playerId, _color: color));
 
         PropagateToClients();
         UpdateInterface();
@@ -254,7 +256,8 @@ public class LobbyOrchestrator : NetworkBehaviour
     #endregion
 }
 
-public class LobbyPlayerData : INetworkSerializable
+/*
+public class PlayerData : INetworkSerializable
 {
     public string name = PlayerPrefs.GetString("PlayerName", "Player");
     public Color color = Color.white;
@@ -269,29 +272,29 @@ public class LobbyPlayerData : INetworkSerializable
     }
     // ~INetworkSerializable
 
-    public LobbyPlayerData(string _name, Color _color, bool _ready)
+    public PlayerData(string _name, Color _color, bool _ready)
     {
         name = _name;
         color = _color;
         ready = _ready;
     }
 
-    public LobbyPlayerData(bool _ready)
+    public PlayerData(bool _ready)
     {
         ready = _ready;
     }
 
-    public LobbyPlayerData(string _name)
+    public PlayerData(string _name)
     {
         name = _name;
     }
 
-    public LobbyPlayerData(Color _color)
+    public PlayerData(Color _color)
     {
         color = _color;
     }
 
-    public LobbyPlayerData()
+    public PlayerData()
     {
         string colorString = PlayerPrefs.GetString("PlayerColor", Color.white.ToString());
         try
@@ -303,3 +306,4 @@ public class LobbyPlayerData : INetworkSerializable
     }
 
 }
+*/

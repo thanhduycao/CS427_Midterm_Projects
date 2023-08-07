@@ -10,7 +10,7 @@ public class LobbyPlayerPanel : MonoBehaviour
     public ulong PlayerId { get; private set; }
 
 
-    public void Init(ulong playerId, LobbyPlayerData playerData)
+    public void Init(ulong playerId, PlayerData playerData)
     {
         PlayerId = playerId;
         SetReady(playerData.ready);
@@ -18,7 +18,7 @@ public class LobbyPlayerPanel : MonoBehaviour
         SetColor(playerData.color);
     }
 
-    public void Set(LobbyPlayerData playerData)
+    public void Set(PlayerData playerData)
     {
         SetReady(playerData.ready);
         SetName(playerData.name);
