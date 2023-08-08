@@ -2,16 +2,11 @@ using System;
 using System.Collections.Generic;
 using Unity.Netcode;
 using Unity.Services.Lobbies.Models;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 #pragma warning disable CS4014
 
-/// <summary>
-///     Lobby orchestrator. I put as much UI logic within the three sub screens,
-///     but the transport and RPC logic remains here. It's possible we could pull
-/// </summary>
 public class LobbyOrchestrator : NetworkBehaviour
 {
     [SerializeField] private MainLobbyScreen _mainLobbyScreen;
@@ -34,6 +29,8 @@ public class LobbyOrchestrator : NetworkBehaviour
         RoomScreen.StartPressed += OnGameStart;
 
         NetworkObject.DestroyWithScene = true;
+
+        CurrenPlayerData.Instance.Id = NetworkManager.Singleton.LocalClientId;
     }
 
     #region Main Lobby
@@ -57,8 +54,6 @@ public class LobbyOrchestrator : NetworkBehaviour
         }
         // }
     }
-
-
 
     #endregion
 
@@ -163,52 +158,21 @@ public class LobbyOrchestrator : NetworkBehaviour
         UpdateInterface();
     }
 
-    public void UpdatePlayerData()
-    {
-        SetNameServerRpc(NetworkManager.Singleton.LocalClientId, CurrenPlayerData.Instance.GetName());
-        SetColorServerRpc(NetworkManager.Singleton.LocalClientId, CurrenPlayerData.Instance.GetColor());
-    }
-
     public void OnReadyClicked()
     {
-        SetReadyServerRpc(NetworkManager.Singleton.LocalClientId);
+        CurrenPlayerData.Instance.Ready = true;
+    }
+
+    public void UpdatePlayer(PlayerData playerData)
+    {
+        UpdatePlayerServerRpc(NetworkManager.Singleton.LocalClientId, playerData);
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void SetReadyServerRpc(ulong playerId)
+    private void UpdatePlayerServerRpc(ulong playerId, PlayerData playerData)
     {
-        if (MatchmakingService._playersInLobby.ContainsKey(playerId)) MatchmakingService._playersInLobby[playerId].ready = true;
-        else MatchmakingService._playersInLobby.Add(playerId, new PlayerData(_id: playerId, _ready: true));
-
-        PropagateToClients();
-        UpdateInterface();
-    }
-
-    public void SetName(string name)
-    {
-        SetNameServerRpc(NetworkManager.Singleton.LocalClientId, name);
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    private void SetNameServerRpc(ulong playerId, string name)
-    {
-        if (MatchmakingService._playersInLobby.ContainsKey(playerId)) MatchmakingService._playersInLobby[playerId].name = name;
-        else MatchmakingService._playersInLobby.Add(playerId, new PlayerData(_id: playerId, _name: name));
-
-        PropagateToClients();
-        UpdateInterface();
-    }
-
-    public void SetColor(Color color)
-    {
-        SetColorServerRpc(NetworkManager.Singleton.LocalClientId, color);
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    private void SetColorServerRpc(ulong playerId, Color color)
-    {
-        if (MatchmakingService._playersInLobby.ContainsKey(playerId)) MatchmakingService._playersInLobby[playerId].color = color;
-        else MatchmakingService._playersInLobby.Add(playerId, new PlayerData(_id: playerId, _color: color));
+        if (MatchmakingService._playersInLobby.ContainsKey(playerId)) MatchmakingService._playersInLobby[playerId] = playerData;
+        else MatchmakingService._playersInLobby.Add(playerId, playerData);
 
         PropagateToClients();
         UpdateInterface();
@@ -255,55 +219,3 @@ public class LobbyOrchestrator : NetworkBehaviour
 
     #endregion
 }
-
-/*
-public class PlayerData : INetworkSerializable
-{
-    public string name = PlayerPrefs.GetString("PlayerName", "Player");
-    public Color color = Color.white;
-    public bool ready = false;
-
-    // INetworkSerializable
-    public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
-    {
-        serializer.SerializeValue(ref name);
-        serializer.SerializeValue(ref color);
-        serializer.SerializeValue(ref ready);
-    }
-    // ~INetworkSerializable
-
-    public PlayerData(string _name, Color _color, bool _ready)
-    {
-        name = _name;
-        color = _color;
-        ready = _ready;
-    }
-
-    public PlayerData(bool _ready)
-    {
-        ready = _ready;
-    }
-
-    public PlayerData(string _name)
-    {
-        name = _name;
-    }
-
-    public PlayerData(Color _color)
-    {
-        color = _color;
-    }
-
-    public PlayerData()
-    {
-        string colorString = PlayerPrefs.GetString("PlayerColor", Color.white.ToString());
-        try
-        {
-            ColorUtility.TryParseHtmlString(colorString, out Color _color);
-            color = _color;
-        }
-        catch (System.Exception) { }
-    }
-
-}
-*/

@@ -7,6 +7,7 @@ public class SyncHealthBar : NetworkBehaviour
 
     private HealthControler m_HealControler;
     private PlayersTracking m_PlayersTracking;
+    private PlayerState _playerState;
     private float _nextRefreshTime;
 
     private void Awake()
@@ -17,7 +18,18 @@ public class SyncHealthBar : NetworkBehaviour
 
     private void Update()
     {
-        if (Time.time >= _nextRefreshTime) Fetch();
+        if (Time.time >= _nextRefreshTime) PropagateToClients();
+
+        if (_playerState == null)
+        {
+            _playerState = FindObjectOfType<GameManager>()?.GetPlayerState(OwnerClientId);
+            if (_playerState != null)
+            {
+                _playerState.OnValueChange += OnPlayerStateChange;
+                m_HealControler.SetPlayerName(_playerState.Name);
+                m_HealControler.SetColor(_playerState.Color);
+            }
+        }
     }
 
     public override void OnDestroy()
@@ -29,33 +41,24 @@ public class SyncHealthBar : NetworkBehaviour
         base.OnDestroy();
     }
 
-    private void Fetch()
+    private void PropagateToClients()
     {
         _nextRefreshTime = Time.time + _RefreshRate;
-
-        PlayerData _playerData = FindObjectOfType<GameManager>()?.GetPlayerData(OwnerClientId);
-        if (_playerData != null)
-        {
-            m_HealControler.SetPlayerName(_playerData.name);
-            m_HealControler.SetColor(_playerData.color);
-        }
-
         if (IsOwner)
         {
-            if (IsServer)
-            {
-                UpdateHealthClientRpc(m_HealControler.GetHealth());
-            }
-            else
-            {
-                UpdateHealthServerRpc(m_HealControler.GetHealth());
-            }
+            if (IsServer) UpdatePlayerStateClientRpc(_playerState);
+            else UpdatePlayerStateServerRpc(_playerState);
         }
         else
         {
             if (IsServer) return;
-            UpdateHealthClientRpc(m_HealControler.GetHealth());
+            UpdatePlayerStateClientRpc(_playerState);
         }
+    }
+
+    private void OnPlayerStateChange()
+    {
+        PropagateToClients();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -64,22 +67,8 @@ public class SyncHealthBar : NetworkBehaviour
         {
             var trap = collision.gameObject.GetComponent<TrapController>();
             int newHeal = TakeDamage(trap.Damage);
-            if (IsOwner)
-            {
-                if (IsServer)
-                {
-                    UpdateHealthClientRpc(newHeal);
-                }
-                else
-                {
-                    UpdateHealthServerRpc(newHeal);
-                }
-            }
-            else
-            {
-                if (IsServer) return;
-                UpdateHealthClientRpc(newHeal);
-            }
+            if (_playerState != null)
+                if (IsOwner || !IsServer) _playerState.Health = newHeal;
         }
     }
 
@@ -89,25 +78,29 @@ public class SyncHealthBar : NetworkBehaviour
     }
 
     [ServerRpc]
-    private void UpdateHealthServerRpc(int newHealth)
+    private void UpdatePlayerStateServerRpc(PlayerState playerState)
     {
-        m_HealControler.SetHealth(newHealth);
-        if (m_PlayersTracking != null)
-        {
-            m_PlayersTracking.UpdatePlayerHealth(OwnerClientId, newHealth);
-        }
-        UpdateHealthClientRpc(newHealth);
+        _playerState = playerState;
+        UpdateInterface();
+        UpdatePlayerStateClientRpc(playerState);
     }
 
     [ClientRpc]
-    private void UpdateHealthClientRpc(int newHealth)
+    private void UpdatePlayerStateClientRpc(PlayerState playerState)
     {
-        m_HealControler.SetHealth(newHealth);
-        if (m_PlayersTracking == null) // recheck if null
+        _playerState = playerState;
+        UpdateInterface();
+    }
+
+    private void UpdateInterface()
+    {
+        if (_playerState == null) return;
+        m_HealControler.SetHealth(_playerState.Health);
+        if (m_PlayersTracking == null && IsClient) // recheck if null
             m_PlayersTracking = FindObjectOfType<PlayersTracking>();
         if (m_PlayersTracking != null)
         {
-            m_PlayersTracking.UpdatePlayerHealth(OwnerClientId, newHealth);
+            m_PlayersTracking.UpdatePlayerState(OwnerClientId, _playerState);
         }
     }
 }

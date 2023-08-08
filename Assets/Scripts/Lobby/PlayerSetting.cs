@@ -3,8 +3,6 @@ using UnityEngine.UI;
 
 public class PlayerSetting : MonoBehaviour
 {
-    [Header("Lobby Orchestrator")]
-    [SerializeField] private LobbyOrchestrator _lobbyOrchestrator;
     [Header("Player Settings")]
     [SerializeField] private GameObject _colorPrefab;
     [SerializeField] private TMPro.TMP_InputField _playerNameInputField;
@@ -13,7 +11,7 @@ public class PlayerSetting : MonoBehaviour
 
     private void Awake()
     {
-        _colorPreview.color = CurrenPlayerData.Instance.GetColor();
+        _colorPreview.color = CurrenPlayerData.Instance.Color;
         // clear all prefabs
         foreach (Transform child in _colorGridLayoutGroup.transform)
         {
@@ -27,24 +25,26 @@ public class PlayerSetting : MonoBehaviour
             rawImage.color = color;
             colorPrefab.GetComponent<Button>().onClick.AddListener(() =>
             {
-                _lobbyOrchestrator.SetColor(color: color);
                 _colorPreview.color = color;
-                CurrenPlayerData.Instance.SetColor(color);
+                CurrenPlayerData.Instance.Color = color;
             });
         }
         // set default
-        _lobbyOrchestrator.SetName(NVJOBNameGen.Uppercase(NVJOBNameGen.GiveAName(7)));
-        _lobbyOrchestrator.SetColor(color: Color.white);
-    }
-
-    private void Start()
-    {
-        _playerNameInputField.text = NVJOBNameGen.Uppercase(NVJOBNameGen.GiveAName(7));
+        CurrenPlayerData.Instance.Color = Color.white;
+        string _name = NVJOBNameGen.Uppercase(NVJOBNameGen.GiveAName(7));
+        CurrenPlayerData.Instance.Name = _name;
+        _playerNameInputField.text = _name;
     }
 
     public void OnPlayerNameEntered()
     {
-        CurrenPlayerData.Instance.SetName(_playerNameInputField.text);
-        _lobbyOrchestrator.SetName(name: _playerNameInputField.text);
+        CurrenPlayerData.Instance.Name = _playerNameInputField.text;
+    }
+
+    public void RandomName()
+    {
+        string _name = NVJOBNameGen.Uppercase(NVJOBNameGen.GiveAName(7));
+        CurrenPlayerData.Instance.Name = _name;
+        _playerNameInputField.text = _name;
     }
 }
