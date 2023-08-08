@@ -20,6 +20,15 @@ public class SyncHealthBar : NetworkBehaviour
         if (Time.time >= _nextRefreshTime) Fetch();
     }
 
+    public override void OnDestroy()
+    {
+        if (m_PlayersTracking != null)
+        {
+            m_PlayersTracking.RemovePlayer(OwnerClientId);
+        }
+        base.OnDestroy();
+    }
+
     private void Fetch()
     {
         _nextRefreshTime = Time.time + _RefreshRate;
@@ -28,6 +37,7 @@ public class SyncHealthBar : NetworkBehaviour
         if (_playerData != null)
         {
             m_HealControler.SetPlayerName(_playerData.name);
+            m_HealControler.SetColor(_playerData.color);
         }
 
         if (IsOwner)
@@ -78,7 +88,6 @@ public class SyncHealthBar : NetworkBehaviour
         return m_HealControler.GetHealth() - dame;
     }
 
-    // make Request Collision ServerRpc and ClientRpc   
     [ServerRpc]
     private void UpdateHealthServerRpc(int newHealth)
     {
@@ -94,7 +103,7 @@ public class SyncHealthBar : NetworkBehaviour
     private void UpdateHealthClientRpc(int newHealth)
     {
         m_HealControler.SetHealth(newHealth);
-        if (m_PlayersTracking == null)
+        if (m_PlayersTracking == null) // recheck if null
             m_PlayersTracking = FindObjectOfType<PlayersTracking>();
         if (m_PlayersTracking != null)
         {

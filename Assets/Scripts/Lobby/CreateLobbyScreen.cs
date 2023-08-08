@@ -19,8 +19,6 @@ public class CreateLobbyScreen : MonoBehaviour {
     public static event Action<LobbyData> LobbyCreated;
 
     public void OnCreateClicked() {
-        Debug.Log("Round selected: " + _roundDropdown.options[_roundDropdown.value].text);
-
         var lobbyData = new LobbyData {
             Name = _nameInput.text,
             MaxPlayers = int.Parse(_maxPlayersInput.text),

@@ -16,6 +16,10 @@ public class HealthControler : MonoBehaviour
     private void FixedUpdate()
     {
         healthBar.SetHealth(currentHealth);
+
+        //int flip = transform.localScale.x > 0 ? 1 : -1;
+        //FlipPlayerName(flip);
+        //healthBar.Flip(flip);
     }
 
     public void SetHealth(int health)
@@ -64,5 +68,15 @@ public class HealthControler : MonoBehaviour
     public void SetPlayerName(string name)
     {
         playerName.text = name;
+    }
+
+    public void SetColor(Color color)
+    {
+        playerName.color = color;
+    }
+
+    public void FlipPlayerName(int flip)
+    {
+        playerName.transform.localScale = new Vector3(flip * playerName.transform.localScale.x, playerName.transform.localScale.y, playerName.transform.localScale.z);
     }
 }
