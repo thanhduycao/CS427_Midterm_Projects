@@ -17,7 +17,7 @@ public class GameManager : NetworkBehaviour
     [Header("Services")]
     [SerializeField] private PlayersTracking _PlayersTracking;
 
-    private readonly Dictionary<ulong, PlayerData> m_PlayerData = new();
+    private readonly Dictionary<ulong, PlayerState> m_PlayerState = new();
 
     private void Awake()
     {
@@ -33,15 +33,8 @@ public class GameManager : NetworkBehaviour
     private void Start()
     {
         if (IsServer) GetPlayerDataServerRpc();
-
-        //Debug.Log($"ClientID: {NetworkManager.Singleton.LocalClientId}");
-        //Debug.Log($"IsServer: {IsServer}");
-        //Debug.Log($"IsClient: {IsClient}");
-        //Debug.Log($"IsHost: {IsHost}");
-        //Debug.Log($"IsOwner: {IsOwner}");
-
-        if (!IsServer) RequestUpdatePlayerDataServerRpc();
-        if (_PlayersTracking != null) _PlayersTracking.NetworkPlayersUpdated(m_PlayerData);
+        else RequestUpdatePlayerDataServerRpc();
+        if (_PlayersTracking != null) _PlayersTracking.NetworkPlayersUpdated(m_PlayerState);
     }
 
     public override void OnNetworkSpawn()
@@ -50,16 +43,16 @@ public class GameManager : NetworkBehaviour
         base.OnNetworkSpawn();
     }
 
-    public Dictionary<ulong, PlayerData> GetPlayersData()
+    public Dictionary<ulong, PlayerState> GetPlayersState()
     {
-        return m_PlayerData;
+        return m_PlayerState;
     }
 
-    public PlayerData GetPlayerData(ulong clientId)
+    public PlayerState GetPlayerState(ulong clientId)
     {
-        if (m_PlayerData.ContainsKey(clientId))
+        if (m_PlayerState.ContainsKey(clientId))
         {
-            return m_PlayerData[clientId];
+            return m_PlayerState[clientId];
         }
         return null;
     }
@@ -90,13 +83,13 @@ public class GameManager : NetworkBehaviour
     {
         foreach (var data in MatchmakingService._playersInLobby)
         {
-            if (m_PlayerData.ContainsKey(data.Key))
+            if (m_PlayerState.ContainsKey(data.Key))
             {
-                m_PlayerData[data.Key] = data.Value;
+                m_PlayerState[data.Key] = new PlayerState(data.Value);
             }
             else
             {
-                m_PlayerData.Add(data.Key, data.Value);
+                m_PlayerState.Add(data.Key, new PlayerState(data.Value));
             }
         }
     }
@@ -104,24 +97,24 @@ public class GameManager : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void RequestUpdatePlayerDataServerRpc()
     {
-        foreach (KeyValuePair<ulong, PlayerData> data in m_PlayerData)
+        foreach (KeyValuePair<ulong, PlayerState> data in m_PlayerState)
         {
             SendPlayerDataClientRpc(data.Key, data.Value);
         }
     }
 
     [ClientRpc]
-    private void SendPlayerDataClientRpc(ulong clientId, PlayerData playerData)
+    private void SendPlayerDataClientRpc(ulong clientId, PlayerState playerState)
     {
         if (IsServer) return;
-        if (m_PlayerData.ContainsKey(clientId))
+        if (m_PlayerState.ContainsKey(clientId))
         {
-            m_PlayerData[clientId] = playerData;
+            m_PlayerState[clientId] = playerState;
         }
         else
         {
-            m_PlayerData.Add(clientId, playerData);
+            m_PlayerState.Add(clientId, playerState);
         }
-        _PlayersTracking.NetworkPlayersUpdated(m_PlayerData);
+        _PlayersTracking.NetworkPlayersUpdated(m_PlayerState);
     }
 }
