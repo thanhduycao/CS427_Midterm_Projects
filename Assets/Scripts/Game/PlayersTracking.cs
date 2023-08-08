@@ -34,10 +34,24 @@ public class PlayersTracking : MonoBehaviour
 
             playerPanel.SetPlayerId(playerId);
             playerPanel.SetPlayerName(playerData.name);
+            playerPanel.SetPlayerColor(playerData.color);
             playerPanel.SetPlayerHealth(100);
 
             // add callback for update health
             OnUpdateHealth += playerPanel.SetPlayerHealth;
+        }
+    }
+
+    public void RemovePlayer(ulong playerId)
+    {
+        var playerPanel = _HealthPlayerPanels.Find(panel => panel.GetPlayerId() == playerId);
+        if (playerPanel != null)
+        {
+            // remove callback for update health
+            OnUpdateHealth -= playerPanel.SetPlayerHealth;
+
+            _HealthPlayerPanels.Remove(playerPanel);
+            Destroy(playerPanel.gameObject);
         }
     }
 

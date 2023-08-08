@@ -45,6 +45,11 @@ public class HealthPlayerPanel : MonoBehaviour
         m_RawImage.texture = texture;
     }
 
+    public void SetPlayerColor(Color color)
+    {
+        m_PlayerName.color = color;
+    }
+
     public ulong GetPlayerId()
     {
         return m_PlayerId;
