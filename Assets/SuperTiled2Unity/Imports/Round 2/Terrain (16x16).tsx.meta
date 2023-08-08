@@ -9,11 +9,7 @@ ScriptedImporter:
   assetBundleVariant: 
   script: {fileID: 11500000, guid: cc34d0f3dc257a442819830b408c5322, type: 3}
   missingFiles: []
-  errors:
-  - Could not generate asset path for 'C:/Users/LAP12418-local/Downloads/Pixel Adventure
-    1/Free/Terrain/Terrain (16x16).png'
-  - 'Missing texture asset: C:/Users/LAP12418-local/Downloads/Pixel Adventure 1/Free/Terrain/Terrain
-    (16x16).png'
+  errors: []
   warnings: []
   missingSortingLayers: []
   missingLayers: []
@@ -21,7 +17,7 @@ ScriptedImporter:
   importerVersion: 13
   pixelsPerUnit: 100
   edgesPerEllipse: 32
-  numberOfObjectsImported: 2
+  numberOfObjectsImported: 487
   useSpriteAtlas: 1
   atlasWidth: 2048
   atlasHeight: 2048
