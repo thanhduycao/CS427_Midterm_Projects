@@ -9,6 +9,8 @@ public class CreateLobbyScreen : MonoBehaviour {
     [SerializeField] private TMP_Dropdown _roundDropdown;
 
     private void Start() {
+        _maxPlayersInput.text = "2";
+        
         SetOptions(_roundDropdown, Constants.Rounds);
 
         void SetOptions(TMP_Dropdown dropdown, IEnumerable<string> values) {
