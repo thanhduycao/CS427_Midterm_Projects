@@ -69,6 +69,17 @@ public class SyncHealthBar : NetworkBehaviour
             int newHeal = TakeDamage(trap.Damage);
             if (_playerState != null)
                 if (IsOwner || !IsServer) _playerState.Health = newHeal;
+
+            MovementNoMana playerMovement = gameObject.GetComponent<MovementNoMana>();
+            playerMovement.KBCounter = playerMovement.KBTotalTime;
+            if (playerMovement.GetFacingProperty() == true)
+            {
+                playerMovement.KnockFromRight = true;
+            }
+            if (playerMovement.GetFacingProperty() == false)
+            {
+                playerMovement.KnockFromRight = false;
+            }
         }
     }
 

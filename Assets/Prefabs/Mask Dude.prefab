@@ -582,6 +582,10 @@ MonoBehaviour:
   extraJumpValue: 1
   mana: 100
   health: 100
+  KBForce: 6
+  KBTotalTime: 0.2
+  KBCounter: 0
+  KnockFromRight: 0
 --- !u!114 &7299381342424426598
 MonoBehaviour:
   m_ObjectHideFlags: 0
