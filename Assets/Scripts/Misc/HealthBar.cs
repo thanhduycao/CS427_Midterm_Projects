@@ -22,4 +22,9 @@ public class HealthBar : MonoBehaviour
     {
         slider.value = health;
     }
+
+    public void Flip(int flip)
+    {
+        slider.transform.localScale = new Vector3(flip * slider.transform.localScale.x, slider.transform.localScale.y, slider.transform.localScale.z);
+    }
 }

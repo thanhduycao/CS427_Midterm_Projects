@@ -22,6 +22,22 @@ public class HealthPlayerPanel : MonoBehaviour
         m_HealthBar.SetHealth(m_Health);
     }
 
+    public void Set(PlayerState playerState)
+    {
+        //SetPlayerId(playerState.Id);
+        SetPlayerName(playerState.Name);
+        SetPlayerColor(playerState.Color);
+        SetPlayerHealth(playerState.Health);
+    }
+
+    public void SetPlayerState(ulong playerId, PlayerState playerState)
+    {
+        if (m_PlayerId == playerId)
+        {
+            Set(playerState);
+        }
+    }
+
     public void SetPlayerName(string playerName)
     {
         m_PlayerName.text = playerName;
@@ -43,6 +59,11 @@ public class HealthPlayerPanel : MonoBehaviour
     public void SetPlayerImage(Texture2D texture)
     {
         m_RawImage.texture = texture;
+    }
+
+    public void SetPlayerColor(Color color)
+    {
+        m_PlayerName.color = color;
     }
 
     public ulong GetPlayerId()

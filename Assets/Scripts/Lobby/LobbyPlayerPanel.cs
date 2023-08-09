@@ -13,16 +13,14 @@ public class LobbyPlayerPanel : MonoBehaviour
     public void Init(ulong playerId, PlayerData playerData)
     {
         PlayerId = playerId;
-        SetReady(playerData.ready);
-        SetName(playerData.name);
-        SetColor(playerData.color);
+        Set(playerData);
     }
 
     public void Set(PlayerData playerData)
     {
-        SetReady(playerData.ready);
-        SetName(playerData.name);
-        SetColor(playerData.color);
+        SetReady(playerData.Ready);
+        SetName(playerData.Name);
+        SetColor(playerData.Color);
     }
 
     public void SetReady(bool ready)

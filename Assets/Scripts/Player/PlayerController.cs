@@ -28,7 +28,7 @@ public class PlayerController : NetworkBehaviour
     [Space]
     public UnityEvent OnLandEvent;
 
-    [System.Serializable]
+    [Serializable]
     public class BoolEvent : UnityEvent<bool> { }
 
     public BoolEvent OnCrouchEvent;
@@ -37,7 +37,7 @@ public class PlayerController : NetworkBehaviour
     private void Awake()
     {
         m_Rigidbody2D = GetComponent<Rigidbody2D>();
-
+        
         if (OnLandEvent == null)
             OnLandEvent = new UnityEvent();
 

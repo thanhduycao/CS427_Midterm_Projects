@@ -1,12 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class CurrenPlayerData : MonoBehaviour
+public class CurrenPlayerData : NetworkBehaviour
 {
     public static CurrenPlayerData Instance { get; private set; }
 
-    public PlayerData currentPlayerData;
+    public PlayerData data;
 
     public void Awake()
     {
@@ -14,7 +13,7 @@ public class CurrenPlayerData : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            currentPlayerData = new PlayerData();
+            data = new PlayerData();
         }
         else
         {
@@ -22,38 +21,55 @@ public class CurrenPlayerData : MonoBehaviour
         }
     }
 
-    public void SetName(string name)
+    // get; set; methods
+    public ulong Id
     {
-        currentPlayerData.name = name;
+        get { return data.Id; }
+        set { data.Id = value; UpdateInterface(); }
     }
 
-    public void SetColor(Color color)
+    public string Name
     {
-        currentPlayerData.color = color;
+        get { return data.Name; }
+        set { data.Name = value; UpdateInterface(); }
     }
 
-    public void SetReady(bool ready)
+    public Color Color
     {
-        currentPlayerData.ready = ready;
+        get { return data.Color; }
+        set { data.Color = value; UpdateInterface(); }
     }
 
-    public void SetPlayerData(PlayerData data)
+    public bool Ready
     {
-        currentPlayerData = data;
+        get { return data.Ready; }
+        set { data.Ready = value; UpdateInterface(); }
     }
 
-    public string GetName()
+    public int Animation
     {
-        return currentPlayerData.name;
+        get { return data.Animation; }
+        set { data.Animation = value; UpdateInterface(); }
     }
 
-    public Color GetColor()
+    public int SpriteRenderer
     {
-        return currentPlayerData.color;
+        get { return data.SpriteRenderer; }
+        set { data.SpriteRenderer = value; UpdateInterface(); }
     }
 
-    public bool GetReady()
+    public int Animator
     {
-        return currentPlayerData.ready;
+        get { return data.Animator; }
+        set { data.Animator = value; UpdateInterface(); }
+    }
+
+    // ~get; set; methods
+
+    public void Fetch() { UpdateInterface(); }
+
+    private void UpdateInterface()
+    {
+        FindObjectOfType<LobbyOrchestrator>().UpdatePlayer(data);
     }
 }

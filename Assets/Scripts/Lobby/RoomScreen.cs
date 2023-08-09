@@ -54,7 +54,7 @@ public class RoomScreen : MonoBehaviour {
     private void FetchRoom()
     {
         _nextRefreshTime = Time.time + _roomRefreshRate;
-        _lobbyOrchestrator.UpdatePlayerData();
+        CurrenPlayerData.Instance.Fetch();
     }
 
     private void OnEnable() {
@@ -102,7 +102,7 @@ public class RoomScreen : MonoBehaviour {
             }
         }
 
-        _startButton.SetActive(NetworkManager.Singleton.IsHost && players.All(p => p.Value.ready));
+        _startButton.SetActive(NetworkManager.Singleton.IsHost && players.All(p => p.Value.Ready));
         _readyButton.SetActive(!_ready);
     }
 

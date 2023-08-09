@@ -8,9 +8,8 @@ public class PlayersTracking : MonoBehaviour
 
     private readonly List<HealthPlayerPanel> _HealthPlayerPanels = new();
 
-    // action for update health
-    public delegate void UpdateHealth(ulong playerId, int health);
-    public static event UpdateHealth OnUpdateHealth;
+    public delegate void OnUpdatedPlayerState(ulong playerId, PlayerState playerState);
+    public static event OnUpdatedPlayerState OnPlayerStateUpdated;
 
     private void OnEnable()
     {
@@ -18,12 +17,12 @@ public class PlayersTracking : MonoBehaviour
         _HealthPlayerPanels.Clear();
     }
 
-    public void NetworkPlayersUpdated(Dictionary<ulong, PlayerData> list)
+    public void NetworkPlayersUpdated(Dictionary<ulong, PlayerState> list)
     {
         var allActivePlayerIds = list.Keys;
         foreach (var playerId in allActivePlayerIds)
         {
-            var playerData = list[playerId];
+            var playerState = list[playerId];
             var playerPanel = _HealthPlayerPanels.Find(panel => panel.GetPlayerId() == playerId);
 
             if (playerPanel == null)
@@ -33,16 +32,26 @@ public class PlayersTracking : MonoBehaviour
             }
 
             playerPanel.SetPlayerId(playerId);
-            playerPanel.SetPlayerName(playerData.name);
-            playerPanel.SetPlayerHealth(100);
-
-            // add callback for update health
-            OnUpdateHealth += playerPanel.SetPlayerHealth;
+            playerPanel.Set(playerState);
+            OnPlayerStateUpdated += playerPanel.SetPlayerState;
         }
     }
 
-    public void UpdatePlayerHealth(ulong playerId, int health)
+    public void RemovePlayer(ulong playerId)
     {
-        OnUpdateHealth?.Invoke(playerId, health);
+        var playerPanel = _HealthPlayerPanels.Find(panel => panel.GetPlayerId() == playerId);
+        if (playerPanel != null)
+        {
+            // remove callback for update health
+            OnPlayerStateUpdated -= playerPanel.SetPlayerState;
+
+            _HealthPlayerPanels.Remove(playerPanel);
+            Destroy(playerPanel.gameObject);
+        }
+    }
+
+    public void UpdatePlayerState(ulong playerId, PlayerState playerState)
+    {
+        OnPlayerStateUpdated?.Invoke(playerId, playerState);
     }
 }
