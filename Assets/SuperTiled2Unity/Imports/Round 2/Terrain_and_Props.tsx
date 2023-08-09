@@ -25,9 +25,8 @@
  </tile>
  <tile id="29">
   <objectgroup draworder="index" id="2">
-   <object id="1" x="0" y="0" width="16" height="16"/>
-   <object id="2" x="0.0222222" y="-0.0444444">
-    <polygon points="0,0 1.88889,0.0444444 15.9556,14.9556 15.9778,16 -0.0222222,16.0444"/>
+   <object id="3" x="0.0625" y="-0.0625">
+    <polygon points="0,0 1.84375,0.09375 15.9063,15.0625 15.9688,16.0313 -0.0625,16.0313"/>
    </object>
   </objectgroup>
  </tile>
@@ -60,7 +59,6 @@
  </tile>
  <tile id="37">
   <objectgroup draworder="index" id="2">
-   <object id="1" x="0" y="0" width="16" height="16"/>
    <object id="2" x="0.03125" y="0.03125">
     <polygon points="0,0 2,-0.03125 15.9063,14.9688 15.9375,15.8438 -0.03125,15.9688"/>
    </object>
@@ -68,17 +66,20 @@
  </tile>
  <tile id="44">
   <objectgroup draworder="index" id="2">
-   <object id="1" x="4" y="0" width="12" height="16"/>
+   <object id="2" x="15.9063" y="-0.0625">
+    <polygon points="0,0 -4.84375,0.0625 -6.875,2.0625 -6.90625,5.96875 -6.875,6.9375 -6.90625,7.0625 -8.90625,7.03125 -11.9063,9.0625 -11.9063,12 -9,15.9688 0.09375,16.0313"/>
+   </object>
   </objectgroup>
  </tile>
  <tile id="50">
   <objectgroup draworder="index" id="2">
-   <object id="1" x="0" y="0" width="12" height="16"/>
+   <object id="2" x="0.0625" y="0">
+    <polygon points="0,0 4.84375,0 6.84375,1.9375 6.96875,5.96875 6.96875,6.90625 8.78125,6.90625 11.8125,8.9375 11.875,11.875 8.90625,15.9688 -0.03125,15.9688"/>
+   </object>
   </objectgroup>
  </tile>
  <tile id="52">
   <objectgroup draworder="index" id="2">
-   <object id="1" x="4" y="0" width="12" height="16"/>
    <object id="2" x="15.9063" y="-0.0625">
     <polygon points="0,0 -4.875,0.09375 -11.8125,6.84375 -11.875,16 0.03125,16.0313"/>
    </object>
@@ -86,7 +87,6 @@
  </tile>
  <tile id="58">
   <objectgroup draworder="index" id="3">
-   <object id="2" x="0" y="0" width="12" height="16"/>
    <object id="3" x="0" y="0.03125">
     <polygon points="0,0 4.96875,-0.0625 11.9688,8.90625 12,15.9688 -0.03125,15.9688"/>
    </object>
