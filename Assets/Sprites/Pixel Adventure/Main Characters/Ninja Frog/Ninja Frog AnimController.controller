@@ -83,7 +83,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: bbafde1624db29740b6e7a17abfece26, type: 2}
+  m_Motion: {fileID: 7400000, guid: d331e7993c789be42a96c8e1c4e42143, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -193,7 +193,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 33c93ac7d0e3f51419acda70f25fec29, type: 2}
+  m_Motion: {fileID: 7400000, guid: 4900ec183d27cc848bf44083acd0dadd, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -222,7 +222,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 76a5e555edf1d8e4084651bedc96f751, type: 2}
+  m_Motion: {fileID: 7400000, guid: 8fab3c1e913ed074984c6ec29e821929, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -325,7 +325,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Idle (32x32)_0 (1)
+  m_Name: Ninja Frog AnimController
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: speed
@@ -386,7 +386,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 59e3d1d50b1523a4ebf4f54abaa266c2, type: 2}
+  m_Motion: {fileID: 7400000, guid: 7d71c36722401594c8af6f7ec59c89a7, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -414,7 +414,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: d90aa05759317944788577e8fef3a412, type: 2}
+  m_Motion: {fileID: 7400000, guid: 999a62bd48dde5241bfbee8f56c059d6, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
