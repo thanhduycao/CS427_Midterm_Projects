@@ -173,7 +173,6 @@ public class MovementNoMana : NetworkBehaviour
             }
             if (KnockFromRight == false)
             {
-                Debug.Log("knock from left");
                 rb.velocity = new Vector2(KBForce, KBForce);
             }
             KBCounter -= Time.deltaTime;
