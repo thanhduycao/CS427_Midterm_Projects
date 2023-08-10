@@ -43,20 +43,20 @@ public class MainMenuManager : MonoBehaviour
     public void OnClickPlayOffline()
     {
         NetworkManager.Singleton.StartHost();
-        NetworkManager.Singleton.SceneManager.LoadScene(Constants.Rounds[0], LoadSceneMode.Single);
+        NetworkManager.Singleton.SceneManager.LoadScene(Constants.Rounds[1], LoadSceneMode.Single);
     }
 
     [Command("StartHost")]
-    public void StartHost()
+    public void StartHost(int screen = 0)
     {
         NetworkManager.Singleton.StartHost();
-        NetworkManager.Singleton.SceneManager.LoadScene(Constants.Rounds[0], LoadSceneMode.Single);
+        NetworkManager.Singleton.SceneManager.LoadScene(Constants.Rounds[screen], LoadSceneMode.Single);
     }
     
     [Command("StartClient")]
-    public void StartClient()
+    public void StartClient(int screen = 0)
     {
         NetworkManager.Singleton.StartClient();
-        NetworkManager.Singleton.SceneManager.LoadScene(Constants.Rounds[0], LoadSceneMode.Single);
+        NetworkManager.Singleton.SceneManager.LoadScene(Constants.Rounds[screen], LoadSceneMode.Single);
     }
 }
