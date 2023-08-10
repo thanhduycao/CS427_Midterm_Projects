@@ -17,7 +17,59 @@ public class GameManager : NetworkBehaviour
     [Header("Services")]
     [SerializeField] private PlayersTracking _PlayersTracking;
 
+    [Header("Game Assets")]
+    [SerializeField] private GameObject _gameFinishedUI = null;
+    [SerializeField] private GameObject _gameLooserUI = null;
+    [SerializeField] private GameObject _gameEndedUI = null;
+    [SerializeField] private GameObject _gamePausedUI = null;
+
     private readonly Dictionary<ulong, PlayerState> m_PlayerState = new();
+
+    // Game State
+    private NetworkVariable<int> _numberOfPlayers = new NetworkVariable<int>(0);
+    private NetworkVariable<int> _numberOfPlayersFinished = new NetworkVariable<int>(0);
+    private NetworkVariable<int> _numberOfPlayersAlive = new NetworkVariable<int>(0);
+    private NetworkVariable<bool> _gameStarted = new NetworkVariable<bool>(false);
+    private NetworkVariable<bool> _gamePaused = new NetworkVariable<bool>(false);
+    private NetworkVariable<bool> _gameEnded = new NetworkVariable<bool>(false);
+    private NetworkVariable<bool> _gameFinished = new NetworkVariable<bool>(false);
+    private NetworkVariable<bool> _gameLooser = new NetworkVariable<bool>(false);
+
+    public int NumberOfPlayers { get => _numberOfPlayers.Value; set => _numberOfPlayers.Value = value; }
+    public int NumberOfPlayersFinished
+    {
+        get => _numberOfPlayersFinished.Value;
+        set
+        {
+            _numberOfPlayersFinished.Value = value;
+            if (AllPlayersFinished)
+            {
+                _gameFinished.Value = true;
+                _gameEnded.Value = true;
+            }
+        }
+    }
+    public int NumberOfPlayersAlive
+    {
+        get => _numberOfPlayersAlive.Value;
+        set
+        {
+            _numberOfPlayersAlive.Value = value;
+            if (AllPlayersDead)
+            {
+                _gameLooser.Value = true;
+                _gameEnded.Value = true;
+            }
+        }
+    }
+    public bool GameStarted { get => _gameStarted.Value; set => _gameStarted.Value = value; }
+    public bool GamePaused { get => _gamePaused.Value; set => _gamePaused.Value = value; }
+    public bool GameEnded { get => _gameEnded.Value; set => _gameEnded.Value = value; }
+    public bool AllPlayersFinished { get => NumberOfPlayersFinished == NumberOfPlayers; }
+    public bool AllPlayersDead { get => NumberOfPlayersAlive == 0; }
+    public bool GameFinished { get => AllPlayersFinished || AllPlayersDead; }
+    // ~Game State
+
 
     private void Awake()
     {
@@ -28,6 +80,8 @@ public class GameManager : NetworkBehaviour
             _spawnStartX = _spawnArea.position.x - _spawnArea.localScale.x / 2;
             _spawnEndX = _spawnArea.position.x + _spawnArea.localScale.x / 2;
         }
+
+        GameStarted = true;
     }
 
     private void Start()
@@ -35,12 +89,62 @@ public class GameManager : NetworkBehaviour
         if (IsServer) GetPlayerDataServerRpc();
         else RequestUpdatePlayerDataServerRpc();
         if (_PlayersTracking != null) _PlayersTracking.NetworkPlayersUpdated(m_PlayerState);
+
+        // set OnValueChanged callbacks
+        _gameFinished.OnValueChanged += OnGameFinished;
+        _gameLooser.OnValueChanged += OnGameLooser;
+        _gameEnded.OnValueChanged += OnGameEnded;
     }
 
     public override void OnNetworkSpawn()
     {
         SpawnPlayerServerRpc(NetworkManager.Singleton.LocalClientId);
         base.OnNetworkSpawn();
+    }
+
+    private void OnGameFinished(bool oldValue, bool newValue)
+    {
+        if (newValue)
+            Debug.Log("===== GAME FINISHED =====");
+        _gameFinishedUI?.SetActive(newValue);
+    }
+
+    private void OnGameLooser(bool oldValue, bool newValue)
+    {
+        if (newValue)
+            Debug.Log("===== GAME LOOSER =====");
+        _gameLooserUI?.SetActive(newValue);
+    }
+
+    private void OnGameEnded(bool oldValue, bool newValue)
+    {
+        if (newValue)
+            Debug.Log("===== GAME ENDED =====");
+        // _gameEndedUI?.SetActive(newValue);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void OnPlayerStateChangedServerRpc()
+    {
+        // reset game state
+        NumberOfPlayersFinished = 0;
+        NumberOfPlayersAlive = NumberOfPlayers;
+
+        foreach (KeyValuePair<ulong, PlayerState> data in m_PlayerState)
+        {
+            Debug.Log($"Id {data.Key}; Name {data.Value.Name} - Health {data.Value.Health}");
+            if (!data.Value.IsAlive)
+            {
+                Debug.Log($"-   Player {data.Value.Name} is dead");
+                NumberOfPlayersAlive -= 1;
+            }
+            if (data.Value.IsFinished)
+            {
+                Debug.Log($"-   Player {data.Value.Name} is finished");
+                NumberOfPlayersFinished += 1;
+            }
+        }
+        Debug.Log("====================================");
     }
 
     public Dictionary<ulong, PlayerState> GetPlayersState()
@@ -57,6 +161,41 @@ public class GameManager : NetworkBehaviour
         return null;
     }
 
+    public void UpdatePlayerState(PlayerState playerState)
+    {
+        UpdatePlayerStateServerRpc(playerState);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void UpdatePlayerStateServerRpc(PlayerState playerState)
+    {
+        if (playerState == null) return;
+        if (m_PlayerState.ContainsKey(playerState.Id))
+        {
+            m_PlayerState[playerState.Id] = playerState;
+        }
+        else
+        {
+            m_PlayerState.Add(playerState.Id, playerState);
+        }
+
+        UpdatePlayerStateClientRpc(playerState);
+    }
+
+    [ClientRpc]
+    private void UpdatePlayerStateClientRpc(PlayerState playerState)
+    {
+        if (playerState == null) return;
+        if (m_PlayerState.ContainsKey(playerState.Id))
+        {
+            m_PlayerState[playerState.Id] = playerState;
+        }
+        else
+        {
+            m_PlayerState.Add(playerState.Id, playerState);
+        }
+    }
+
     [ServerRpc(RequireOwnership = false)]
     private void SpawnPlayerServerRpc(ulong playerId)
     {
@@ -68,6 +207,10 @@ public class GameManager : NetworkBehaviour
 
     public override void OnDestroy()
     {
+        //if (m_PlayerState.ContainsKey(NetworkManager.Singleton.LocalClientId))
+        //{
+        //    m_PlayerState.Remove(NetworkManager.Singleton.LocalClientId);
+        //}
         base.OnDestroy();
         LeaveLobby();
     }
@@ -81,17 +224,21 @@ public class GameManager : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void GetPlayerDataServerRpc()
     {
-        foreach (var data in MatchmakingService._playersInLobby)
+        foreach (KeyValuePair<ulong, PlayerData> data in MatchmakingService._playersInLobby)
         {
             if (m_PlayerState.ContainsKey(data.Key))
             {
                 m_PlayerState[data.Key] = new PlayerState(data.Value);
+                m_PlayerState[data.Key].Id = data.Key; // just in case
             }
             else
             {
                 m_PlayerState.Add(data.Key, new PlayerState(data.Value));
+                m_PlayerState[data.Key].Id = data.Key; // just in case
             }
         }
+
+        NumberOfPlayers = m_PlayerState.Count;
     }
 
     [ServerRpc(RequireOwnership = false)]
