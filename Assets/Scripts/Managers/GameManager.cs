@@ -262,6 +262,6 @@ public class GameManager : NetworkBehaviour
         {
             m_PlayerState.Add(clientId, playerState);
         }
-        _PlayersTracking.NetworkPlayersUpdated(m_PlayerState);
+        _PlayersTracking?.NetworkPlayersUpdated(m_PlayerState);
     }
 }
