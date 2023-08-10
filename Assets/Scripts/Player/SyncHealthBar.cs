@@ -25,7 +25,7 @@ public class SyncHealthBar : NetworkBehaviour
             _playerState = FindObjectOfType<GameManager>()?.GetPlayerState(OwnerClientId);
             if (_playerState != null)
             {
-                _playerState.OnValueChange += OnPlayerStateChange;
+                // _playerState.OnValueChange += OnPlayerStateChange;
                 m_HealControler.SetPlayerName(_playerState.Name);
                 m_HealControler.SetColor(_playerState.Color);
             }
@@ -56,9 +56,11 @@ public class SyncHealthBar : NetworkBehaviour
         }
     }
 
-    private void OnPlayerStateChange()
+    public void OnPlayerStateChange()
     {
         PropagateToClients();
+        if (IsOwner)
+            FindObjectOfType<GameManager>()?.OnPlayerStateChangedServerRpc();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -68,7 +70,31 @@ public class SyncHealthBar : NetworkBehaviour
             var trap = collision.gameObject.GetComponent<TrapController>();
             int newHeal = TakeDamage(trap.Damage);
             if (_playerState != null)
-                if (IsOwner || !IsServer) _playerState.Health = newHeal;
+                if (IsOwner || !IsServer)
+                {
+                    _playerState.OnValueChange += OnPlayerStateChange;
+                    _playerState.Health = newHeal;
+                }
+
+            MovementNoMana playerMovement = gameObject.GetComponent<MovementNoMana>();
+            playerMovement.KBCounter = playerMovement.KBTotalTime;
+            if (playerMovement.GetFacingProperty() == true)
+            {
+                playerMovement.KnockFromRight = true;
+            }
+            if (playerMovement.GetFacingProperty() == false)
+            {
+                playerMovement.KnockFromRight = false;
+            }
+        }
+        else if (collision.TryGetComponent(out FinishFlag _))
+        {
+            if (_playerState != null)
+                if (IsOwner || !IsServer)
+                {
+                    _playerState.OnValueChange += OnPlayerStateChange;
+                    _playerState.IsFinished = true;
+                }
         }
     }
 
@@ -82,6 +108,7 @@ public class SyncHealthBar : NetworkBehaviour
     {
         _playerState = playerState;
         UpdateInterface();
+        FindObjectOfType<GameManager>()?.UpdatePlayerState(_playerState);
         UpdatePlayerStateClientRpc(playerState);
     }
 
@@ -89,6 +116,7 @@ public class SyncHealthBar : NetworkBehaviour
     private void UpdatePlayerStateClientRpc(PlayerState playerState)
     {
         _playerState = playerState;
+        FindObjectOfType<GameManager>()?.UpdatePlayerState(_playerState);
         UpdateInterface();
     }
 

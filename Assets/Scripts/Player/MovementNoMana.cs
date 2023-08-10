@@ -16,15 +16,24 @@ public class MovementNoMana : NetworkBehaviour
     [SerializeField] private float mana = 100f;
     [SerializeField] private float health = 100f;
 
-    private PlayerController controller;
+    [Header("Effects")]
+    [Header("Knock back")]
+    [SerializeField] private float KBForce;
+    [SerializeField] public float KBTotalTime;
+
+    protected PlayerController controller;
     private Animator animator;
     private Rigidbody2D rb;
 
     private bool jump = false;
     private bool fall = false;
+    private bool hit = false;
     private bool onLanded = true;
     private bool doubleJump;
     private int extraJump;
+
+    public float KBCounter = 0;
+    public bool KnockFromRight;
 
     // Start is called before the first frame update
     void Start()
@@ -90,6 +99,7 @@ public class MovementNoMana : NetworkBehaviour
         if (rb.velocity.y < 0)
         {
             animator.SetBool("isFalling", false);
+            animator.SetBool("isHit", false);
             onLanded = true;
             fall = false;
         }
@@ -106,6 +116,11 @@ public class MovementNoMana : NetworkBehaviour
         {
             rb.AddForce(transform.up * 500 + transform.right * 500);
         }
+    }
+
+    public bool GetFacingProperty()
+    {
+        return controller.getFacingProperty();
     }
 
     public float GetMana()
@@ -148,9 +163,27 @@ public class MovementNoMana : NetworkBehaviour
         health += amount;
     }
 
+    public void checkKnockbackEffect()
+    {
+        if (KBCounter > 0)
+        {
+            if (KnockFromRight == true)
+            {
+                rb.velocity = new Vector2(-KBForce, KBForce);
+            }
+            if (KnockFromRight == false)
+            {
+                rb.velocity = new Vector2(KBForce, KBForce);
+            }
+            KBCounter -= Time.deltaTime;
+            animator.SetBool("isHit", true);
+        }
+    }
+
     void FixedUpdate()
     {
         controller.Move(movement * Time.fixedDeltaTime, false, jump, doubleJump);
+        checkKnockbackEffect();
         jump = false;
         doubleJump = false;
     }
