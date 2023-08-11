@@ -1,19 +1,16 @@
-using System;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.Animations;
 
 public class SyncHealthBar : NetworkBehaviour
 {
     [SerializeField] private float _RefreshRate = 2;
-    [SerializeField] private ConfigAvatarData _AvatarData;
+    [SerializeField] private ConfigAvatarData m_AvatarData;
 
     private Animator m_Animator;
     private HealthControler m_HealControler;
     private PlayersTracking m_PlayersTracking;
-    private PlayerState _playerState;
+    private PlayerState m_playerState;
     private float _nextRefreshTime;
-
 
     private void Awake()
     {
@@ -26,20 +23,20 @@ public class SyncHealthBar : NetworkBehaviour
     {
         if (Time.time >= _nextRefreshTime) PropagateToClients();
 
-        if (_playerState == null)
+        if (m_playerState == null)
         {
-            _playerState = FindObjectOfType<GameManager>()?.GetPlayerState(OwnerClientId);
-            if (_playerState != null)
+            m_playerState = FindObjectOfType<GameManager>()?.GetPlayerState(OwnerClientId);
+            if (m_playerState != null)
             {
-                // _playerState.OnValueChange += OnPlayerStateChange;
+                // m_playerState.OnValueChange += OnPlayerStateChange;
                 FindObjectOfType<GameManager>().OnGameDestroy += OnGameDestroy;
-                m_HealControler.SetPlayerName(_playerState.Name);
-                m_HealControler.SetColor(_playerState.Color);
-                m_Animator.runtimeAnimatorController = _AvatarData.GetAvatar(_playerState.Avatar).AvatarAnimator;
+                m_HealControler.SetPlayerName(m_playerState.Name);
+                m_HealControler.SetColor(m_playerState.Color);
+                m_Animator.runtimeAnimatorController = m_AvatarData.GetAvatar(m_playerState.Avatar).AvatarAnimator;
             }
         }
     }
-    
+
     public void OnGameDestroy()
     {
         Destroy(gameObject);
@@ -59,13 +56,13 @@ public class SyncHealthBar : NetworkBehaviour
         _nextRefreshTime = Time.time + _RefreshRate;
         if (IsOwner)
         {
-            if (IsServer) UpdatePlayerStateClientRpc(_playerState);
-            else UpdatePlayerStateServerRpc(_playerState);
+            if (IsServer) UpdatePlayerStateClientRpc(m_playerState);
+            else UpdatePlayerStateServerRpc(m_playerState);
         }
         else
         {
             if (IsServer) return;
-            UpdatePlayerStateClientRpc(_playerState);
+            UpdatePlayerStateClientRpc(m_playerState);
         }
     }
 
@@ -82,11 +79,11 @@ public class SyncHealthBar : NetworkBehaviour
         {
             var trap = collision.gameObject.GetComponent<TrapController>();
             int newHeal = TakeDamage(trap.Damage);
-            if (_playerState != null)
+            if (m_playerState != null)
                 if (IsOwner || !IsServer)
                 {
-                    _playerState.OnValueChange += OnPlayerStateChange;
-                    _playerState.Health = newHeal;
+                    m_playerState.OnValueChange += OnPlayerStateChange;
+                    m_playerState.Health = newHeal;
                 }
 
             MovementNoMana playerMovement = gameObject.GetComponent<MovementNoMana>();
@@ -102,11 +99,11 @@ public class SyncHealthBar : NetworkBehaviour
         }
         else if (collision.TryGetComponent(out FinishFlag _))
         {
-            if (_playerState != null)
+            if (m_playerState != null)
                 if (IsOwner || !IsServer)
                 {
-                    _playerState.OnValueChange += OnPlayerStateChange;
-                    _playerState.IsFinished = true;
+                    m_playerState.OnValueChange += OnPlayerStateChange;
+                    m_playerState.IsFinished = true;
                 }
         }
     }
@@ -119,29 +116,29 @@ public class SyncHealthBar : NetworkBehaviour
     [ServerRpc]
     private void UpdatePlayerStateServerRpc(PlayerState playerState)
     {
-        _playerState = playerState;
+        m_playerState = playerState;
         UpdateInterface();
-        FindObjectOfType<GameManager>()?.UpdatePlayerState(_playerState);
+        FindObjectOfType<GameManager>()?.UpdatePlayerState(m_playerState);
         UpdatePlayerStateClientRpc(playerState);
     }
 
     [ClientRpc]
     private void UpdatePlayerStateClientRpc(PlayerState playerState)
     {
-        _playerState = playerState;
-        FindObjectOfType<GameManager>()?.UpdatePlayerState(_playerState);
+        m_playerState = playerState;
+        FindObjectOfType<GameManager>()?.UpdatePlayerState(m_playerState);
         UpdateInterface();
     }
 
     private void UpdateInterface()
     {
-        if (_playerState == null) return;
-        m_HealControler.SetHealth(_playerState.Health);
+        if (m_playerState == null) return;
+        m_HealControler.SetHealth(m_playerState.Health);
         if (m_PlayersTracking == null && IsClient) // recheck if null
             m_PlayersTracking = FindObjectOfType<PlayersTracking>();
         if (m_PlayersTracking != null)
         {
-            m_PlayersTracking.UpdatePlayerState(OwnerClientId, _playerState);
+            m_PlayersTracking.UpdatePlayerState(OwnerClientId, m_playerState);
         }
     }
 }

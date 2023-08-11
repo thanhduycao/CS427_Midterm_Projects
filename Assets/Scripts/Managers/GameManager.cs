@@ -114,8 +114,11 @@ public class GameManager : NetworkBehaviour
 
         if (_gameFinishedUI != null)
             _gameFinishedUI?.SetActive(newValue);
-
-        NetworkManager.Singleton.SceneManager.LoadScene(Constants.Rounds[1], LoadSceneMode.Single);
+        else
+        {
+            GlobalVariable.Instance.Round += 1;
+            NetworkManager.Singleton.SceneManager.LoadScene(Constants.Rounds[GlobalVariable.Instance.Round], LoadSceneMode.Single);
+        }
     }
 
     private void OnGameLooser(bool oldValue, bool newValue)
