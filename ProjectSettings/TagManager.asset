@@ -8,6 +8,7 @@ TagManager:
   - Wall
   - Finish Flag
   - Bot
+  - Dead Zone
   layers:
   - Default
   - TransparentFX
@@ -18,9 +19,9 @@ TagManager:
   - Background
   - 
   - Obstacles
+  - Saw
   - Player
   - Bot
-  - 
   - 
   - 
   - 

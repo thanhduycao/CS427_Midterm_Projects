@@ -304,6 +304,14 @@ MonoBehaviour:
     m_Unicode: 99
     m_GlyphIndex: 70
     m_Scale: 1
+  - m_ElementType: 1
+    m_Unicode: 98
+    m_GlyphIndex: 69
+    m_Scale: 1
+  - m_ElementType: 1
+    m_Unicode: 99
+    m_GlyphIndex: 70
+    m_Scale: 1
   m_AtlasTextures:
   - {fileID: 28256370963634744}
   m_AtlasTextureIndex: 0
@@ -379,6 +387,14 @@ MonoBehaviour:
     m_Y: 80
     m_Width: 3
     m_Height: 943
+  - m_X: 56
+    m_Y: 160
+    m_Width: 967
+    m_Height: 863
+  - m_X: 56
+    m_Y: 134
+    m_Width: 57
+    m_Height: 889
   m_fontInfo:
     Name: Oswald
     PointSize: 71
