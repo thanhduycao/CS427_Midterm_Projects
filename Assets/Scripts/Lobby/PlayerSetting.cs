@@ -10,6 +10,7 @@ public class PlayerSetting : MonoBehaviour
     [SerializeField] private TMPro.TMP_InputField _playerNameInputField;
     [SerializeField] private GridLayoutGroup _colorGridLayoutGroup;
     [SerializeField] private RawImage _colorPreview;
+    [SerializeField] private RawImage _avatarPreview;
     [SerializeField] private Transform _avatarParent;
 
     private void Awake()
@@ -47,11 +48,14 @@ public class PlayerSetting : MonoBehaviour
                 var name = _avatarData.avatars[i].AvatarName;
                 var avatarPrefab = Instantiate(_avatarPrefab, _avatarParent);
                 var avatarImage = avatarPrefab.GetComponent<RawImage>();
-                avatarImage.texture = _avatarData.avatars[i].AvatarSprite.texture;
+                var image = _avatarData.avatars[i].AvatarSprite.texture;
+                avatarImage.texture = image;
+
 
                 avatarPrefab.GetComponent<Button>().onClick.AddListener(() =>
                 {
                     CurrenPlayerData.Instance.Avatar = index;
+                    _avatarPreview.texture = image;
                 });
             }
         }
