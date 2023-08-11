@@ -7,8 +7,13 @@ namespace DialogSystem
     public class DialogBaseClass : MonoBehaviour
     {
         [SerializeField] GameObject dialogGameObject;
+        [SerializeField] Image avatarImg;
+        [SerializeField] ConfigAvatarData _avatars;
+        [SerializeField] private Sprite forestSprite;
+
         public MultipleLine conversationInJson = new MultipleLine();
 
+        int avatar = CurrenPlayerData.Instance.Avatar;
         public bool finished = false;
         public bool isProcessing = false;
         protected IEnumerator WriteText(TextAsset jsonFile, Text textHolder, Color textColor, Font textFont, float delay, string Sname)
@@ -19,6 +24,13 @@ namespace DialogSystem
             textHolder.font = textFont;
             foreach (Line line in conversationInJson.conversation)
             {
+                if (line.speaker == "Player")
+                {
+                    avatarImg.sprite = _avatars.GetAvatar(avatar).AvatarSprite;
+                } else if (line.speaker == "Forest")
+                {
+                    avatarImg.sprite = forestSprite;
+                }
                 textHolder.text = string.Empty;
                 for (int i = 0; i < line.text.Length; ++i)
                 {
