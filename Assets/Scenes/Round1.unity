@@ -16965,14 +16965,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62f9db95d3fc1bc4d96552b1d4cdf7de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerPrefab: {fileID: 6497262029801676422, guid: 7cf9cc20c87e66245a4ffa531bd6dda1, type: 3}
+  _playerPrefab: {fileID: 3015798802947491218, guid: 7cf9cc20c87e66245a4ffa531bd6dda1, type: 3}
   _spawnArea: {fileID: 1659590240}
   _spawnStartY: 0
   _spawnEndY: 0
   _spawnStartX: 0
   _spawnEndX: 0
   _PlayersTracking: {fileID: 433341885}
-  _gameFinishedUI: {fileID: 1254117485}
+  _gameFinishedUI: {fileID: 0}
   _gameLooserUI: {fileID: 0}
   _gameEndedUI: {fileID: 0}
   _gamePausedUI: {fileID: 0}

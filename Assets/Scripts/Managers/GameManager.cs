@@ -1,6 +1,9 @@
+using System;
 using System.Collections.Generic;
 using Unity.Netcode;
+using Unity.Services.Lobbies.Models;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : NetworkBehaviour
 {
@@ -34,6 +37,8 @@ public class GameManager : NetworkBehaviour
     private NetworkVariable<bool> _gameEnded = new NetworkVariable<bool>(false);
     private NetworkVariable<bool> _gameFinished = new NetworkVariable<bool>(false);
     private NetworkVariable<bool> _gameLooser = new NetworkVariable<bool>(false);
+
+    public Action OnGameDestroy;
 
     public int NumberOfPlayers { get => _numberOfPlayers.Value; set => _numberOfPlayers.Value = value; }
     public int NumberOfPlayersFinished
@@ -106,21 +111,29 @@ public class GameManager : NetworkBehaviour
     {
         if (newValue)
             Debug.Log("===== GAME FINISHED =====");
-        _gameFinishedUI?.SetActive(newValue);
+
+        if (_gameFinishedUI != null)
+            _gameFinishedUI?.SetActive(newValue);
+
+        NetworkManager.Singleton.SceneManager.LoadScene(Constants.Rounds[1], LoadSceneMode.Single);
     }
 
     private void OnGameLooser(bool oldValue, bool newValue)
     {
         if (newValue)
             Debug.Log("===== GAME LOOSER =====");
-        _gameLooserUI?.SetActive(newValue);
+
+        if (_gameLooserUI != null)
+            _gameLooserUI?.SetActive(newValue);
     }
 
     private void OnGameEnded(bool oldValue, bool newValue)
     {
         if (newValue)
             Debug.Log("===== GAME ENDED =====");
-        // _gameEndedUI?.SetActive(newValue);
+
+        if (_gameEndedUI != null)
+            _gameEndedUI?.SetActive(newValue);
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -200,7 +213,7 @@ public class GameManager : NetworkBehaviour
     private void SpawnPlayerServerRpc(ulong playerId)
     {
         // make random spawn point
-        var spawnPoint = new Vector3(Random.Range(_spawnStartX, _spawnEndX), Random.Range(_spawnStartY, _spawnEndY), 0f);
+        var spawnPoint = new Vector3(UnityEngine.Random.Range(_spawnStartX, _spawnEndX), UnityEngine.Random.Range(_spawnStartY, _spawnEndY), 0f);
         var spawn = Instantiate(_playerPrefab, spawnPoint, Quaternion.identity);
         spawn.NetworkObject.SpawnWithOwnership(playerId);
     }
@@ -212,7 +225,11 @@ public class GameManager : NetworkBehaviour
         //    m_PlayerState.Remove(NetworkManager.Singleton.LocalClientId);
         //}
         base.OnDestroy();
-        LeaveLobby();
+
+        OnGameDestroy?.Invoke();
+
+        if (!GameFinished)
+            LeaveLobby();
     }
 
     public async void LeaveLobby()
@@ -262,6 +279,6 @@ public class GameManager : NetworkBehaviour
         {
             m_PlayerState.Add(clientId, playerState);
         }
-        _PlayersTracking.NetworkPlayersUpdated(m_PlayerState);
+        _PlayersTracking?.NetworkPlayersUpdated(m_PlayerState);
     }
 }
