@@ -47,15 +47,13 @@ public class PlayerSetting : MonoBehaviour
                 var index = i;
                 var name = _avatarData.avatars[i].AvatarName;
                 var avatarPrefab = Instantiate(_avatarPrefab, _avatarParent);
-                var avatarImage = avatarPrefab.GetComponent<RawImage>();
-                var image = _avatarData.avatars[i].AvatarSprite.texture;
-                avatarImage.texture = image;
-
+                var avatarImage = _avatarData.avatars[i].AvatarSprite.texture;
+                avatarPrefab.GetComponent<RawImage>().texture = avatarImage;
 
                 avatarPrefab.GetComponent<Button>().onClick.AddListener(() =>
                 {
                     CurrenPlayerData.Instance.Avatar = index;
-                    _avatarPreview.texture = image;
+                    _avatarPreview.texture = avatarImage;
                 });
             }
         }
