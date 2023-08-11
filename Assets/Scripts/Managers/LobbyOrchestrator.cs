@@ -214,6 +214,7 @@ public class LobbyOrchestrator : NetworkBehaviour
         // using (new Load("Starting the game...")) {
         // await MatchmakingService.LockLobby();
         NetworkManager.Singleton.SceneManager.LoadScene(Constants.Rounds[_lobby.Round], LoadSceneMode.Single);
+        GlobalVariable.Instance.Round = _lobby.Round;
         // }
     }
 
