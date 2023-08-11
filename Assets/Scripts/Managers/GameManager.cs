@@ -224,9 +224,9 @@ public class GameManager : NetworkBehaviour
         //{
         //    m_PlayerState.Remove(NetworkManager.Singleton.LocalClientId);
         //}
-        base.OnDestroy();
 
         OnGameDestroy?.Invoke();
+        base.OnDestroy();
 
         if (!GameFinished)
             LeaveLobby();
