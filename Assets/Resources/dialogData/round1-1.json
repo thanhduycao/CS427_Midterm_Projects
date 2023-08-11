@@ -2,7 +2,7 @@
   "conversation": [
     {
       "speaker": "Player",
-      "text": "\"I hear your plea, soul of the forest.\""
+      "text": "I hear your plea, soul of the forest."
     },
     {
       "speaker": "Forest",
@@ -10,7 +10,7 @@
     },
     {
       "speaker": "Player",
-      "text": "\"I shall find the Forgotten Flower and fulfill my destiny. I won't let darkness consume this place any longer.\""
+      "text": "I shall find the Forgotten Flower and fulfill my destiny. I won't let darkness consume this place any longer."
     },
     {
       "speaker": "Forest",
