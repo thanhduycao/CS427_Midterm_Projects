@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7311f0fe02ba7ea4aa6598e07ef4b7a7, type: 3}
+  m_Name: AvatarData
+  m_EditorClassIdentifier: 
+  avatars:
+  - AvatarName: Mask Dude
+    AvatarSprite: {fileID: 21300000, guid: e22f5f3c5ae1b4149bbe0ca568e40872, type: 3}
+    AvatarAnimator: {fileID: 9100000, guid: d161cd5f4ff251e4cb2dfb14dd1b2a49, type: 2}
+    Available: 1
+  - AvatarName: Ninja Frog
+    AvatarSprite: {fileID: 21300000, guid: 264c309b156faa843910d44f0d62f1e9, type: 3}
+    AvatarAnimator: {fileID: 9100000, guid: 871d8f3c21ad636429f8f207d7e74b7e, type: 2}
+    Available: 0
+  - AvatarName: Pink Man
+    AvatarSprite: {fileID: 21300000, guid: 4ea3753b83ba1634e8fddc23430b2c13, type: 3}
+    AvatarAnimator: {fileID: 9100000, guid: 75f7427411e24374ea5a81bc6619fcb0, type: 2}
+    Available: 1
+  - AvatarName: Virtual Guy
+    AvatarSprite: {fileID: 21300000, guid: 5d49a768bd70adb4aa6a282ede4bc525, type: 3}
+    AvatarAnimator: {fileID: 9100000, guid: 21129752d74915f49a5ae233ea15b784, type: 2}
+    Available: 1

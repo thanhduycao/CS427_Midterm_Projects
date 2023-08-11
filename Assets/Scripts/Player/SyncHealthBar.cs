@@ -1,21 +1,25 @@
 using System;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Animations;
 
 public class SyncHealthBar : NetworkBehaviour
 {
     [SerializeField] private float _RefreshRate = 2;
+    [SerializeField] private ConfigAvatarData _AvatarData;
 
+    private Animator m_Animator;
     private HealthControler m_HealControler;
     private PlayersTracking m_PlayersTracking;
     private PlayerState _playerState;
     private float _nextRefreshTime;
 
+
     private void Awake()
     {
         m_HealControler = GetComponent<HealthControler>();
         m_PlayersTracking = FindObjectOfType<PlayersTracking>();
-        FindObjectOfType<GameManager>().OnGameDestroy += OnGameDestroy;
+        m_Animator = GetComponent<Animator>();
     }
 
     private void Update()
@@ -28,8 +32,10 @@ public class SyncHealthBar : NetworkBehaviour
             if (_playerState != null)
             {
                 // _playerState.OnValueChange += OnPlayerStateChange;
+                FindObjectOfType<GameManager>().OnGameDestroy += OnGameDestroy;
                 m_HealControler.SetPlayerName(_playerState.Name);
                 m_HealControler.SetColor(_playerState.Color);
+                m_Animator.runtimeAnimatorController = _AvatarData.GetAvatar(_playerState.Avatar).AvatarAnimator;
             }
         }
     }
