@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class DialogZone : MonoBehaviour
@@ -10,13 +8,6 @@ public class DialogZone : MonoBehaviour
     [SerializeField] private GameObject dialogLine;
     private bool isInZone = false;
     private MovementNoMana playerMovement;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
     void Update()
     {
         bool isDialogProcessing = dialogLine.GetComponent<DialogSystem.DialogLine>().isProcessing;
@@ -36,10 +27,8 @@ public class DialogZone : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("Here zone 1");
         if (collision.TryGetComponent(out Player _))
         {
-            Debug.Log("active");
             canvasGameObject.SetActive(true);
             isInZone = true;
             playerMovement = collision.gameObject.GetComponent<MovementNoMana>();
