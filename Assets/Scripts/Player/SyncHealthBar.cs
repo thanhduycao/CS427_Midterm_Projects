@@ -1,3 +1,4 @@
+using System;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -14,6 +15,7 @@ public class SyncHealthBar : NetworkBehaviour
     {
         m_HealControler = GetComponent<HealthControler>();
         m_PlayersTracking = FindObjectOfType<PlayersTracking>();
+        FindObjectOfType<GameManager>().OnGameDestroy += OnGameDestroy;
     }
 
     private void Update()
@@ -30,6 +32,11 @@ public class SyncHealthBar : NetworkBehaviour
                 m_HealControler.SetColor(_playerState.Color);
             }
         }
+    }
+    
+    public void OnGameDestroy()
+    {
+        Destroy(gameObject);
     }
 
     public override void OnDestroy()
