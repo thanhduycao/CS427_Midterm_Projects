@@ -46,24 +46,11 @@ public class CurrenPlayerData : NetworkBehaviour
         set { data.Ready = value; UpdateInterface(); }
     }
 
-    public int Animation
+    public int Avatar
     {
-        get { return data.Animation; }
-        set { data.Animation = value; UpdateInterface(); }
+        get { return data.Avatar; }
+        set { data.Avatar = value; UpdateInterface(); }
     }
-
-    public int SpriteRenderer
-    {
-        get { return data.SpriteRenderer; }
-        set { data.SpriteRenderer = value; UpdateInterface(); }
-    }
-
-    public int Animator
-    {
-        get { return data.Animator; }
-        set { data.Animator = value; UpdateInterface(); }
-    }
-
     // ~get; set; methods
 
     public void Fetch() { UpdateInterface(); }

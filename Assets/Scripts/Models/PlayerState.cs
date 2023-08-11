@@ -33,9 +33,7 @@ public class PlayerState : INetworkSerializable
     //private Vector3 angularAcceleration = Vector3.zero;
 
     // Player Assets
-    private int animator = 0;
-    private int animation = 0;
-    private int spriteRenderer = 0;
+    private int avatar = 0;
 
     // INetworkSerializable
     public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
@@ -62,9 +60,7 @@ public class PlayerState : INetworkSerializable
         //serializer.SerializeValue(ref angularVelocity);
         //serializer.SerializeValue(ref angularAcceleration);
 
-        serializer.SerializeValue(ref animation);
-        serializer.SerializeValue(ref spriteRenderer);
-        serializer.SerializeValue(ref animator);
+        serializer.SerializeValue(ref avatar);
     }
     // ~INetworkSerializable
 
@@ -75,10 +71,7 @@ public class PlayerState : INetworkSerializable
         id = data.Id;
         name = data.Name;
         color = data.Color;
-
-        animator = data.Animator;
-        animation = data.Animation;
-        spriteRenderer = data.SpriteRenderer;
+        avatar = data.Avatar;
     }
     // ~Constructors
 
@@ -112,8 +105,6 @@ public class PlayerState : INetworkSerializable
     //public Vector3 Acceleration { get => acceleration; set { acceleration = value; OnValueChange?.Invoke(); } }
     //public Vector3 AngularVelocity { get => angularVelocity; set { angularVelocity = value; OnValueChange?.Invoke(); } }
     //public Vector3 AngularAcceleration { get => angularAcceleration; set { angularAcceleration = value; OnValueChange?.Invoke(); } }
-    public int Animation { get => animation; set { animation = value; OnValueChange?.Invoke(); } }
-    public int SpriteRenderer { get => spriteRenderer; set { spriteRenderer = value; OnValueChange?.Invoke(); } }
-    public int Animator { get => animator; set { animator = value; OnValueChange?.Invoke(); } }
+    public int Avatar { get => avatar; set { avatar = value; OnValueChange?.Invoke(); } }
     // ~get; set; methods, and OnValueChange() calls
 }

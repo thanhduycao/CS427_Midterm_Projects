@@ -746,6 +746,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _RefreshRate: 2
+  _AvatarData: {fileID: 11400000, guid: cf27c717ba99fba4dbd3b0f8b879fbd0, type: 2}
 --- !u!114 &1012281808985190
 MonoBehaviour:
   m_ObjectHideFlags: 0

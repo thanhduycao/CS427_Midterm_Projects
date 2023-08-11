@@ -3,6 +3,8 @@ using UnityEngine.UI;
 
 public class HealthPlayerPanel : MonoBehaviour
 {
+    [Header("References")]
+    [SerializeField] private ConfigAvatarData m_ConfigAvatarData;
     [SerializeField] private ulong m_PlayerId;
     [SerializeField] private TMPro.TMP_Text m_PlayerName;
     [SerializeField] private HealthBar m_HealthBar;
@@ -28,6 +30,7 @@ public class HealthPlayerPanel : MonoBehaviour
         SetPlayerName(playerState.Name);
         SetPlayerColor(playerState.Color);
         SetPlayerHealth(playerState.Health);
+        SetPlayerAvatar(playerState.Avatar);
     }
 
     public void SetPlayerState(ulong playerId, PlayerState playerState)
@@ -56,9 +59,9 @@ public class HealthPlayerPanel : MonoBehaviour
         }
     }
 
-    public void SetPlayerImage(Texture2D texture)
+    public void SetPlayerImage(Sprite sprite)
     {
-        m_RawImage.texture = texture;
+        m_RawImage.texture = sprite.texture;
     }
 
     public void SetPlayerColor(Color color)
@@ -74,5 +77,11 @@ public class HealthPlayerPanel : MonoBehaviour
     public void SetPlayerId(ulong playerId)
     {
         m_PlayerId = playerId;
+    }
+
+    public void SetPlayerAvatar(int avatar)
+    {
+        AvatarData _avatar = m_ConfigAvatarData.GetAvatar(avatar);
+        SetPlayerImage(_avatar.AvatarSprite);
     }
 }
