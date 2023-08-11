@@ -34,6 +34,7 @@ public class MovementNoMana : NetworkBehaviour
 
     public float KBCounter = 0;
     public bool KnockFromRight;
+    public bool isDialogProcessing = false;
 
     // Start is called before the first frame update
     void Start()
@@ -46,51 +47,54 @@ public class MovementNoMana : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-        movement = 0;
-        if (onLanded == true)
+        if (!isDialogProcessing)
         {
-            extraJump = extraJumpValue;
-        }
-
-        if (Input.GetKey(KeyCode.D))
-        {
-            movement = movementSpeed;
-        }
-        if (Input.GetKey(KeyCode.A))
-        {
-            movement = -movementSpeed;
-        }
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            if (extraJump > 0 && onLanded == false)
+            movement = 0;
+            if (onLanded == true)
             {
-                doubleJump = true;
+                extraJump = extraJumpValue;
+            }
+
+            if (Input.GetKey(KeyCode.D))
+            {
+                movement = movementSpeed;
+            }
+            if (Input.GetKey(KeyCode.A))
+            {
+                movement = -movementSpeed;
+            }
+            if (Input.GetKeyDown(KeyCode.W))
+            {
+                if (extraJump > 0 && onLanded == false)
+                {
+                    doubleJump = true;
+                    animator.SetBool("isJumping", false);
+                    // animator.SetBool("isDoubleJump", doubleJump);
+                    extraJump--;
+                }
+                else
+                {
+                    jump = true;
+                    onLanded = false;
+                    animator.SetBool("isJumping", true);
+                }
+            }
+            if (rb.velocity.y < -.3f)
+            {
+                jump = false;
                 animator.SetBool("isJumping", false);
-                // animator.SetBool("isDoubleJump", doubleJump);
-                extraJump--;
+                // animator.SetBool("isDoubleJump", false);
+                if (fall == false && onLanded == false)
+                {
+                    fall = true;
+                    animator.SetBool("isFalling", true);
+                }
             }
-            else
-            {
-                jump = true;
-                onLanded = false;
-                animator.SetBool("isJumping", true);
-            }
-        }
-        if (rb.velocity.y < -.3f)
-        {
-            jump = false;
-            animator.SetBool("isJumping", false);
-            // animator.SetBool("isDoubleJump", false);
-            if (fall == false && onLanded == false)
-            {
-                fall = true;
-                animator.SetBool("isFalling", true);
-            }
-        }
-        //if (Input.GetKeyDown(KeyCode.D)) { MusicManager.findMusic(Sname); }
-        //if (Input.GetKeyDown(KeyCode.A)) { MusicManager.findMusic(Sname); }
+            //if (Input.GetKeyDown(KeyCode.D)) { MusicManager.findMusic(Sname); }
+            //if (Input.GetKeyDown(KeyCode.A)) { MusicManager.findMusic(Sname); }
 
-        animator.SetFloat("speed", Mathf.Abs(movement));
+            animator.SetFloat("speed", Mathf.Abs(movement));
+        }
     }
 
     public void OnLanding()
