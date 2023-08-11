@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Unity.Netcode;
+using Unity.Services.Authentication;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -190,6 +191,11 @@ public class LobbyOrchestrator : NetworkBehaviour
         NetworkManager.Singleton.Shutdown();
         await MatchmakingService.LeaveLobby();
         // }
+    }
+
+    public void OnQuitClick()
+    { 
+        Application.Quit();
     }
 
     public override void OnDestroy()
