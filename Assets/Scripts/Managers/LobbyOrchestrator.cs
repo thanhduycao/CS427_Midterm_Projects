@@ -212,7 +212,7 @@ public class LobbyOrchestrator : NetworkBehaviour
     private async void OnGameStart()
     {
         // using (new Load("Starting the game...")) {
-        await MatchmakingService.LockLobby();
+        // await MatchmakingService.LockLobby();
         NetworkManager.Singleton.SceneManager.LoadScene(Constants.Rounds[_lobby.Round], LoadSceneMode.Single);
         // }
     }
