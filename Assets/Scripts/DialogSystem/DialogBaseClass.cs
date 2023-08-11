@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,13 +6,8 @@ namespace DialogSystem
 {
     public class DialogBaseClass : MonoBehaviour
     {
-        // [SerializeField] public TextAsset jsonFile;
         [SerializeField] GameObject dialogGameObject;
         public MultipleLine conversationInJson = new MultipleLine();
-        private void Awake()
-        {
-            // conversationInJson = JsonUtility.FromJson<MultipleLine>(jsonFile.text);
-        }
 
         public bool finished = false;
         public bool isProcessing = false;
@@ -23,11 +17,8 @@ namespace DialogSystem
             conversationInJson = JsonUtility.FromJson<MultipleLine>(jsonFile.text);
             textHolder.color = textColor;
             textHolder.font = textFont;
-            Debug.Log("Here");
-            Debug.Log(conversationInJson.conversation[0].text);
             foreach (Line line in conversationInJson.conversation)
             {
-                Debug.Log(line.text);
                 textHolder.text = string.Empty;
                 for (int i = 0; i < line.text.Length; ++i)
                 {
@@ -39,7 +30,6 @@ namespace DialogSystem
                         yield return new WaitForSeconds((float)0.5);
                         break;
                     }
-                    Debug.Log(Sname);
                     yield return new WaitForSeconds(delay);
                 }
                 yield return new WaitUntil(() => Input.GetMouseButton(0));
