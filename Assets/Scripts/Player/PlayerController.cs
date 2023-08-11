@@ -75,79 +75,80 @@ public class PlayerController : NetworkBehaviour
 
     public void Move(float move, bool crouch, bool jump, bool doubleJump)
     {
-        // If crouching, check to see if the character can stand up
-        if (!crouch)
-        {
-            // If the character has a ceiling preventing them from standing up, keep them crouching
-            if (Physics2D.OverlapCircle(m_CeilingCheck.position, k_CeilingRadius, m_WhatIsGround))
+       
+            // If crouching, check to see if the character can stand up
+            if (!crouch)
             {
-                crouch = true;
-            }
-        }
-
-        //only control the player if grounded or airControl is turned on
-        if (m_Grounded || m_AirControl)
-        {
-
-            // If crouching
-            if (crouch)
-            {
-                if (!m_wasCrouching)
+                // If the character has a ceiling preventing them from standing up, keep them crouching
+                if (Physics2D.OverlapCircle(m_CeilingCheck.position, k_CeilingRadius, m_WhatIsGround))
                 {
-                    m_wasCrouching = true;
-                    OnCrouchEvent.Invoke(true);
-                }
-
-                // Reduce the speed by the crouchSpeed multiplier
-                move *= m_CrouchSpeed;
-
-                // Disable one of the colliders when crouching
-                if (m_CrouchDisableCollider != null)
-                    m_CrouchDisableCollider.enabled = false;
-            }
-            else
-            {
-                // Enable the collider when not crouching
-                if (m_CrouchDisableCollider != null)
-                    m_CrouchDisableCollider.enabled = true;
-
-                if (m_wasCrouching)
-                {
-                    m_wasCrouching = false;
-                    OnCrouchEvent.Invoke(false);
+                    crouch = true;
                 }
             }
 
-            // Move the character by finding the target velocity
-            Vector3 targetVelocity = new Vector2(move * 10f, m_Rigidbody2D.velocity.y);
-            // And then smoothing it out and applying it to the character
-            m_Rigidbody2D.velocity = Vector3.SmoothDamp(m_Rigidbody2D.velocity, targetVelocity, ref m_Velocity, m_MovementSmoothing);
+            //only control the player if grounded or airControl is turned on
+            if (m_Grounded || m_AirControl)
+            {
 
-            // If the input is moving the player right and the player is facing left...
-            if (move > 0 && !m_FacingRight)
-            {
-                // ... flip the player.
-                Flip();
+                // If crouching
+                if (crouch)
+                {
+                    if (!m_wasCrouching)
+                    {
+                        m_wasCrouching = true;
+                        OnCrouchEvent.Invoke(true);
+                    }
+
+                    // Reduce the speed by the crouchSpeed multiplier
+                    move *= m_CrouchSpeed;
+
+                    // Disable one of the colliders when crouching
+                    if (m_CrouchDisableCollider != null)
+                        m_CrouchDisableCollider.enabled = false;
+                }
+                else
+                {
+                    // Enable the collider when not crouching
+                    if (m_CrouchDisableCollider != null)
+                        m_CrouchDisableCollider.enabled = true;
+
+                    if (m_wasCrouching)
+                    {
+                        m_wasCrouching = false;
+                        OnCrouchEvent.Invoke(false);
+                    }
+                }
+
+                // Move the character by finding the target velocity
+                Vector3 targetVelocity = new Vector2(move * 10f, m_Rigidbody2D.velocity.y);
+                // And then smoothing it out and applying it to the character
+                m_Rigidbody2D.velocity = Vector3.SmoothDamp(m_Rigidbody2D.velocity, targetVelocity, ref m_Velocity, m_MovementSmoothing);
+
+                // If the input is moving the player right and the player is facing left...
+                if (move > 0 && !m_FacingRight)
+                {
+                    // ... flip the player.
+                    Flip();
+                }
+                // Otherwise if the input is moving the player left and the player is facing right...
+                else if (move < 0 && m_FacingRight)
+                {
+                    // ... flip the player.
+                    Flip();
+                }
             }
-            // Otherwise if the input is moving the player left and the player is facing right...
-            else if (move < 0 && m_FacingRight)
+            // If the player should jump...
+            if ((m_Grounded && jump) || (!m_Grounded && doubleJump))
             {
-                // ... flip the player.
-                Flip();
+                // Add a vertical force to the player.
+                m_Grounded = false;
+                float m_AppliedJumpForce = m_JumpForce;
+                if (doubleJump)
+                {
+                    m_AppliedJumpForce = m_DoubleJumpForce;
+                }
+                m_Rigidbody2D.AddForce(new Vector2(0f, m_AppliedJumpForce));
             }
-        }
-        // If the player should jump...
-        if ((m_Grounded && jump) || (!m_Grounded && doubleJump))
-        {
-            // Add a vertical force to the player.
-            m_Grounded = false;
-            float m_AppliedJumpForce = m_JumpForce;
-            if (doubleJump)
-            {
-                m_AppliedJumpForce = m_DoubleJumpForce;
-            }
-            m_Rigidbody2D.AddForce(new Vector2(0f, m_AppliedJumpForce));
-        }
     }
 
     public bool getFacingProperty()
