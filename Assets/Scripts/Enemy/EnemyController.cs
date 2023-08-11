@@ -14,6 +14,7 @@ public class EnemyController : MovementController
     [SerializeField] private float _speedUp = 10f;
     [SerializeField] private float _radiusScanArea = 1f;
     [SerializeField] private Transform m_Rada;
+    [SerializeField] private GameObject m_Weakness;
 
     [Header("Enemy Area")]
     [SerializeField] private Transform _enemyArea;
@@ -206,5 +207,10 @@ public class EnemyController : MovementController
             path = p;
             currentWaypoint = 0;
         }
+    }
+
+    public void OnDestroyObject()
+    {
+        Destroy(gameObject);
     }
 }
