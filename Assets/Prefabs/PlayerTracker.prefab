@@ -741,6 +741,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6270252d49e781f4eb002d7ca6d3a14c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_ConfigAvatarData: {fileID: 11400000, guid: cf27c717ba99fba4dbd3b0f8b879fbd0, type: 2}
   m_PlayerId: 0
   m_PlayerName: {fileID: 323312669308589821}
   m_HealthBar: {fileID: 8131823381120916090}
