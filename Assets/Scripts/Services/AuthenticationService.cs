@@ -11,6 +11,7 @@ public static class Authentication {
         }
 
         if (!AuthenticationService.Instance.IsSignedIn) {
+            AuthenticationService.Instance.ClearSessionToken();
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
             PlayerId = AuthenticationService.Instance.PlayerId;
         }

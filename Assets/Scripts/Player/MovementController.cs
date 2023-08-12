@@ -16,9 +16,9 @@ public abstract class MovementController : NetworkBehaviour
     [SerializeField] protected Collider2D m_CrouchDisableCollider;                // A collider that will be disabled when crouching
     [SerializeField] protected Transform m_PlayerTransform;
 
-    protected const float k_GroundedRadius = .2f; // Radius of the overlap circle to determine if grounded
+    protected const float k_GroundedRadius = .7f; // Radius of the overlap circle to determine if grounded
     protected bool m_Grounded;            // Whether or not the player is grounded.
-    protected const float k_CeilingRadius = .2f; // Radius of the overlap circle to determine if the player can stand up
+    protected const float k_CeilingRadius = .7f; // Radius of the overlap circle to determine if the player can stand up
     protected Rigidbody2D m_Rigidbody2D;
     protected bool m_FacingRight = true;  // For determining which way the player is currently facing.
     protected Vector3 m_Velocity = Vector3.zero;

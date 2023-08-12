@@ -33,6 +33,7 @@ public static class MatchmakingService {
         }
 
         _currentLobby = null;
+        _playersInLobby.Clear();
     }
 
     // Obviously you'd want to add customization to the query, but this
@@ -55,6 +56,8 @@ public static class MatchmakingService {
         // Create a relay allocation and generate a join code to share with the lobby
         var a = await RelayService.Instance.CreateAllocationAsync(data.MaxPlayers);
         var joinCode = await RelayService.Instance.GetJoinCodeAsync(a.AllocationId);
+
+        Debug.Log($"Created allocation {a.AllocationId} with join code {joinCode}");
 
         // Create a lobby, adding the relay join code to the lobby data
         var options = new CreateLobbyOptions
@@ -120,7 +123,7 @@ public static class MatchmakingService {
                 _currentLobby = null;
             }
             catch (Exception e) {
-                Debug.Log(e);
+                // Debug.Log(e);
             }
     }
 }
