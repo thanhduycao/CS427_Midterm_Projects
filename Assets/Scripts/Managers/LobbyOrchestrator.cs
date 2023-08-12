@@ -201,8 +201,8 @@ public class LobbyOrchestrator : NetworkBehaviour
 
     public void OnBackClick()
     {
-        MatchmakingService._playersInLobby.Clear();
-        NetworkManager.Singleton.Shutdown();
+        OnLobbyLeft();
+        MatchmakingService.ResetStatics();
     }
 
     public override void OnDestroy()

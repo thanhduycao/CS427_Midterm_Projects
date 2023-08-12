@@ -7,9 +7,6 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : NetworkBehaviour
 {
-    [Header("Player")]
-    [SerializeField] private PlayerController _playerPrefab;
-
     [Header("Spawn Area")]
     [SerializeField] Transform _spawnArea;
     [SerializeField] private float _spawnStartY = 0f;
@@ -217,7 +214,7 @@ public class GameManager : NetworkBehaviour
     {
         // make random spawn point
         var spawnPoint = new Vector3(UnityEngine.Random.Range(_spawnStartX, _spawnEndX), UnityEngine.Random.Range(_spawnStartY, _spawnEndY), 0f);
-        var spawn = Instantiate(_playerPrefab, spawnPoint, Quaternion.identity);
+        var spawn = Instantiate(GlobalVariable.Instance.PlayerPrefab, spawnPoint, Quaternion.identity);
         spawn.NetworkObject.SpawnWithOwnership(playerId);
     }
 
