@@ -33,6 +33,7 @@ public static class MatchmakingService {
         }
 
         _currentLobby = null;
+        _playersInLobby.Clear();
     }
 
     // Obviously you'd want to add customization to the query, but this
