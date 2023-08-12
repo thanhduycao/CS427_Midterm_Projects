@@ -1708,6 +1708,10 @@ PrefabInstance:
       propertyPath: GlobalObjectIdHash
       value: 3212839395
       objectReference: {fileID: 0}
+    - target: {fileID: 7122955694742477108, guid: 52048c3bd68670d409891b5f76dfd0f7, type: 3}
+      propertyPath: _enemyArea
+      value: 
+      objectReference: {fileID: 1575017835}
     - target: {fileID: 7796158328141940007, guid: 52048c3bd68670d409891b5f76dfd0f7, type: 3}
       propertyPath: m_RootOrder
       value: -1
@@ -3614,6 +3618,10 @@ PrefabInstance:
       propertyPath: GlobalObjectIdHash
       value: 3212839395
       objectReference: {fileID: 0}
+    - target: {fileID: 7122955694742477108, guid: 52048c3bd68670d409891b5f76dfd0f7, type: 3}
+      propertyPath: _enemyArea
+      value: 
+      objectReference: {fileID: 1614135233}
     - target: {fileID: 7796158328141940007, guid: 52048c3bd68670d409891b5f76dfd0f7, type: 3}
       propertyPath: m_RootOrder
       value: -1
@@ -5385,6 +5393,10 @@ PrefabInstance:
       propertyPath: GlobalObjectIdHash
       value: 3212839395
       objectReference: {fileID: 0}
+    - target: {fileID: 7122955694742477108, guid: 52048c3bd68670d409891b5f76dfd0f7, type: 3}
+      propertyPath: _enemyArea
+      value: 
+      objectReference: {fileID: 391411766}
     - target: {fileID: 7796158328141940007, guid: 52048c3bd68670d409891b5f76dfd0f7, type: 3}
       propertyPath: m_RootOrder
       value: -1
@@ -6090,6 +6102,10 @@ PrefabInstance:
       propertyPath: GlobalObjectIdHash
       value: 3212839395
       objectReference: {fileID: 0}
+    - target: {fileID: 7122955694742477108, guid: 52048c3bd68670d409891b5f76dfd0f7, type: 3}
+      propertyPath: _enemyArea
+      value: 
+      objectReference: {fileID: 167798896}
     - target: {fileID: 7122955694742477108, guid: 52048c3bd68670d409891b5f76dfd0f7, type: 3}
       propertyPath: jumpEnabled
       value: 1

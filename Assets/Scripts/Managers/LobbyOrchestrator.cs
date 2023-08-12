@@ -19,10 +19,10 @@ public class LobbyOrchestrator : NetworkBehaviour
 
     private void Start()
     {
-        _mainLobbyScreen.gameObject.SetActive(false);
+        _mainLobbyScreen.gameObject.SetActive(GlobalVariable.Instance.OnReload);
         _createScreen.gameObject.SetActive(false);
         _roomScreen.gameObject.SetActive(false);
-        _playerSetting.gameObject.SetActive(true);
+        _playerSetting.gameObject.SetActive(!GlobalVariable.Instance.OnReload);
 
         CreateLobbyScreen.LobbyCreated += CreateLobby;
         LobbyRoomPanel.LobbySelected += OnLobbySelected;
@@ -31,6 +31,7 @@ public class LobbyOrchestrator : NetworkBehaviour
         RoomScreen.BackPressed += OnBackClick;
 
         NetworkObject.DestroyWithScene = true;
+        GlobalVariable.Instance.OnReload = false;
 
         CurrenPlayerData.Instance.Id = NetworkManager.Singleton.LocalClientId;
     }
@@ -221,7 +222,6 @@ public class LobbyOrchestrator : NetworkBehaviour
 
     public override void OnDestroy()
     {
-        Debug.Log("=== Destroying Orchestrator ===");
         base.OnDestroy();
         CreateLobbyScreen.LobbyCreated -= CreateLobby;
         LobbyRoomPanel.LobbySelected -= OnLobbySelected;

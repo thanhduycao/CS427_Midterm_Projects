@@ -8074,6 +8074,7 @@ MonoBehaviour:
   _colorPreview: {fileID: 2087718381}
   _avatarPreview: {fileID: 1316598562}
   _avatarParent: {fileID: 450629345}
+  _saveButton: {fileID: 567202014}
 --- !u!1 &1497614690
 GameObject:
   m_ObjectHideFlags: 0
