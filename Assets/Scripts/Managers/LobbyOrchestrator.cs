@@ -28,6 +28,7 @@ public class LobbyOrchestrator : NetworkBehaviour
         LobbyRoomPanel.LobbySelected += OnLobbySelected;
         RoomScreen.LobbyLeft += OnLobbyLeft;
         RoomScreen.StartPressed += OnGameStart;
+        RoomScreen.BackPressed += OnBackClick;
 
         NetworkObject.DestroyWithScene = true;
 
@@ -198,9 +199,14 @@ public class LobbyOrchestrator : NetworkBehaviour
         Application.Quit();
     }
 
+    public void OnBackClick()
+    {
+        MatchmakingService._playersInLobby.Clear();
+        NetworkManager.Singleton.Shutdown();
+    }
+
     public override void OnDestroy()
     {
-
         base.OnDestroy();
         CreateLobbyScreen.LobbyCreated -= CreateLobby;
         LobbyRoomPanel.LobbySelected -= OnLobbySelected;
@@ -212,7 +218,7 @@ public class LobbyOrchestrator : NetworkBehaviour
         {
             NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnectCallback;
         }
-
+        // OnLobbyLeft();
     }
 
     private async void OnGameStart()

@@ -7,10 +7,6 @@ using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-/// <summary>
-///     NetworkBehaviours cannot easily be parented, so the network logic will take place
-///     on the network scene object "NetworkLobby"
-/// </summary>
 public class RoomScreen : MonoBehaviour {
     [SerializeField] private LobbyPlayerPanel _playerPanelPrefab;
     [SerializeField] private LobbyOrchestrator _lobbyOrchestrator;
@@ -32,19 +28,7 @@ public class RoomScreen : MonoBehaviour {
     private string _sceneName;
 
     public static event Action StartPressed;
-
-    private void Awake()
-    {
-        foreach (var button in _listButtons)
-        {
-            button.SetActive(true);
-        }
-        
-        foreach (var button in _listButtonsDisable)
-        {
-            button.SetActive(false);
-        }
-    }
+    public static event Action BackPressed;
 
     private void Update()
     {
@@ -58,7 +42,10 @@ public class RoomScreen : MonoBehaviour {
     }
 
     private void OnEnable() {
+        foreach (var button in _listButtons) button.SetActive(true);
+        foreach (var button in _listButtonsDisable) button.SetActive(false);
         foreach (Transform child in _playerPanelParent) Destroy(child.gameObject);
+
         _playerPanels.Clear();
 
         LobbyOrchestrator.LobbyPlayersUpdated += NetworkLobbyPlayersUpdated;
@@ -130,5 +117,6 @@ public class RoomScreen : MonoBehaviour {
         {
             button.SetActive(true);
         }
+        BackPressed?.Invoke();
     }
 }

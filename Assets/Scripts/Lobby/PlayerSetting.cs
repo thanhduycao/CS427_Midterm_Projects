@@ -4,7 +4,6 @@ using UnityEngine.UI;
 public class PlayerSetting : MonoBehaviour
 {
     [Header("Player Settings")]
-    [SerializeField] private ConfigAvatarData _avatarData;
     [SerializeField] private GameObject _colorPrefab;
     [SerializeField] private GameObject _avatarPrefab;
     [SerializeField] private TMPro.TMP_InputField _playerNameInputField;
@@ -13,21 +12,12 @@ public class PlayerSetting : MonoBehaviour
     [SerializeField] private RawImage _avatarPreview;
     [SerializeField] private Transform _avatarParent;
 
-    private void Awake()
+    private void OnEnable()
     {
+        foreach (Transform child in _colorGridLayoutGroup.transform) Destroy(child.gameObject);
+        foreach (Transform child in _avatarParent) Destroy(child.gameObject);
+
         _colorPreview.color = CurrenPlayerData.Instance.Color;
-        // clear all prefabs
-        foreach (Transform child in _colorGridLayoutGroup.transform)
-        {
-            Destroy(child.gameObject);
-        }
-
-        // clear avatar parent
-        foreach (Transform child in _avatarParent)
-        {
-            Destroy(child.gameObject);
-        }
-
         foreach (var color in Constants.Colors)
         {
             var colorPrefab = Instantiate(_colorPrefab, _colorGridLayoutGroup.transform);
@@ -39,15 +29,16 @@ public class PlayerSetting : MonoBehaviour
                 CurrenPlayerData.Instance.Color = color;
             });
         }
-        
-        for (int i = 0; i < _avatarData.avatars.Length; i++)
+
+        _avatarPreview.texture = GlobalVariable.Instance.GetAvatar(CurrenPlayerData.Instance.Avatar).AvatarSprite.texture;
+        for (int i = 0; i < GlobalVariable.Instance.AvatarCount(); i++)
         {
-            if (_avatarData.avatars[i].Available)
+            if (GlobalVariable.Instance.GetAvatar(i).Available)
             {
                 var index = i;
-                var name = _avatarData.avatars[i].AvatarName;
+                var name = GlobalVariable.Instance.GetAvatar(i).AvatarName;
                 var avatarPrefab = Instantiate(_avatarPrefab, _avatarParent);
-                var avatarImage = _avatarData.avatars[i].AvatarSprite.texture;
+                var avatarImage = GlobalVariable.Instance.GetAvatar(i).AvatarSprite.texture;
                 avatarPrefab.GetComponent<RawImage>().texture = avatarImage;
 
                 avatarPrefab.GetComponent<Button>().onClick.AddListener(() =>
@@ -59,10 +50,10 @@ public class PlayerSetting : MonoBehaviour
         }
 
         // set default
-        CurrenPlayerData.Instance.Color = Color.white;
-        string _name = NVJOBNameGen.Uppercase(NVJOBNameGen.GiveAName(7));
-        CurrenPlayerData.Instance.Name = _name;
-        _playerNameInputField.text = _name;
+        CurrenPlayerData.Instance.Color = CurrenPlayerData.Instance.Color == Color.white ? Color.white : CurrenPlayerData.Instance.Color;
+        string _name = NVJOBNameGen.Uppercase(NVJOBNameGen.GiveAName(5));
+        CurrenPlayerData.Instance.Name = CurrenPlayerData.Instance.Name == "Unknown" ? _name : CurrenPlayerData.Instance.Name;
+        _playerNameInputField.text = CurrenPlayerData.Instance.Name;
     }
 
     public void OnPlayerNameEntered()
@@ -72,7 +63,7 @@ public class PlayerSetting : MonoBehaviour
 
     public void RandomName()
     {
-        string _name = NVJOBNameGen.Uppercase(NVJOBNameGen.GiveAName(7));
+        string _name = NVJOBNameGen.Uppercase(NVJOBNameGen.GiveAName(5));
         CurrenPlayerData.Instance.Name = _name;
         _playerNameInputField.text = _name;
     }

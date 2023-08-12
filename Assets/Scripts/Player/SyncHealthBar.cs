@@ -4,7 +4,6 @@ using UnityEngine;
 public class SyncHealthBar : NetworkBehaviour
 {
     [SerializeField] private float _RefreshRate = 2;
-    [SerializeField] private ConfigAvatarData m_AvatarData;
 
     private Animator m_Animator;
     private HealthControler m_HealControler;
@@ -32,7 +31,7 @@ public class SyncHealthBar : NetworkBehaviour
                 FindObjectOfType<GameManager>().OnGameDestroy += OnGameDestroy;
                 m_HealControler.SetPlayerName(m_playerState.Name);
                 m_HealControler.SetColor(m_playerState.Color);
-                m_Animator.runtimeAnimatorController = m_AvatarData.GetAvatar(m_playerState.Avatar).AvatarAnimator;
+                m_Animator.runtimeAnimatorController = GlobalVariable.Instance.GetAvatar(m_playerState.Avatar).AvatarAnimator;
             }
         }
     }

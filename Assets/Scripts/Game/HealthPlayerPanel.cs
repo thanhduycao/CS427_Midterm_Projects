@@ -4,7 +4,6 @@ using UnityEngine.UI;
 public class HealthPlayerPanel : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private ConfigAvatarData m_ConfigAvatarData;
     [SerializeField] private ulong m_PlayerId;
     [SerializeField] private TMPro.TMP_Text m_PlayerName;
     [SerializeField] private HealthBar m_HealthBar;
@@ -81,7 +80,7 @@ public class HealthPlayerPanel : MonoBehaviour
 
     public void SetPlayerAvatar(int avatar)
     {
-        AvatarData _avatar = m_ConfigAvatarData.GetAvatar(avatar);
+        AvatarData _avatar = GlobalVariable.Instance.GetAvatar(avatar);
         SetPlayerImage(_avatar.AvatarSprite);
     }
 }

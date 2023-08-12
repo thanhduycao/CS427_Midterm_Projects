@@ -8,7 +8,6 @@ namespace DialogSystem
     {
         [SerializeField] GameObject dialogGameObject;
         [SerializeField] Image avatarImg;
-        [SerializeField] ConfigAvatarData _avatars;
         [SerializeField] private Sprite forestSprite;
 
         public MultipleLine conversationInJson = new MultipleLine();
@@ -26,7 +25,7 @@ namespace DialogSystem
             {
                 if (line.speaker == "Player")
                 {
-                    avatarImg.sprite = _avatars.GetAvatar(avatar).AvatarSprite;
+                    avatarImg.sprite = GlobalVariable.Instance.GetAvatar(avatar).AvatarSprite;
                 } else if (line.speaker == "Forest")
                 {
                     avatarImg.sprite = forestSprite;
