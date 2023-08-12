@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Unity.Netcode;
-using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -136,6 +135,11 @@ public class GameManager : NetworkBehaviour
             _gameEndedUI?.SetActive(newValue);
     }
 
+    public void OnGameQuit()
+    {
+        LeaveLobby();
+    }
+
     [ServerRpc(RequireOwnership = false)]
     public void OnPlayerStateChangedServerRpc()
     {
@@ -228,11 +232,36 @@ public class GameManager : NetworkBehaviour
         base.OnDestroy();
     }
 
-    public async void LeaveLobby()
+    public void LeaveLobby()
+    {
+        LeaveLobbyClientRpc();
+        OnLeaveLobby();
+    }
+
+    public async void OnLeaveLobby()
     {
         await MatchmakingService.LeaveLobby();
         if (NetworkManager.Singleton != null) NetworkManager.Singleton.Shutdown();
         MatchmakingService.ResetStatics();
+    }
+
+    //[ServerRpc(RequireOwnership = false)]
+    //private void LeaveLobbyServerRpc()
+    //{
+    //    LeaveLobbyClientRpc();
+    //    // OnLeaveLobby();
+
+    //    GlobalVariable.Instance.OnReload = true;
+    //    string sceneName = GlobalVariable.Instance.GameMode == 1 ? Constants.LobbyScene : Constants.MainMenu;
+    //    SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
+    //}
+
+    [ClientRpc]
+    private void LeaveLobbyClientRpc()
+    {
+        GlobalVariable.Instance.OnReload = true;
+        string sceneName = GlobalVariable.Instance.GameMode == 1 ? Constants.LobbyScene : Constants.MainMenu;
+        SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
     }
 
     [ServerRpc(RequireOwnership = false)]
