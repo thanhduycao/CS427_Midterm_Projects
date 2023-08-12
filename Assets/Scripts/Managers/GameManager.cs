@@ -178,6 +178,34 @@ public class GameManager : NetworkBehaviour
         return null;
     }
 
+    public void OnRemovePlayer(ulong clientId)
+    {
+        OnRemovePlayerServerRpc(clientId);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void OnRemovePlayerServerRpc(ulong clientId)
+    {
+        if (m_PlayerState.ContainsKey(clientId))
+        {
+            m_PlayerState.Remove(clientId);
+        }
+        NumberOfPlayers = m_PlayerState.Count;
+        OnPlayerStateChangedServerRpc();
+        OnRemovePlayerClientRpc(clientId);
+    }
+
+    [ClientRpc]
+    private void OnRemovePlayerClientRpc(ulong clientId)
+    {
+        if (!IsServer) return;
+        if (m_PlayerState.ContainsKey(clientId))
+        {
+            m_PlayerState.Remove(clientId);
+        }
+        // NumberOfPlayers = m_PlayerState.Count;
+    }
+
     public void UpdatePlayerState(PlayerState playerState)
     {
         UpdatePlayerStateServerRpc(playerState);
@@ -234,7 +262,14 @@ public class GameManager : NetworkBehaviour
 
     public void LeaveLobby()
     {
-        LeaveLobbyClientRpc();
+        if (IsServer) LeaveLobbyClientRpc();
+        else
+        {
+            OnRemovePlayer(OwnerClientId);
+            GlobalVariable.Instance.OnReload = true;
+            string sceneName = GlobalVariable.Instance.GameMode == 1 ? Constants.LobbyScene : Constants.MainMenu;
+            SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
+        }
         OnLeaveLobby();
     }
 
@@ -244,17 +279,6 @@ public class GameManager : NetworkBehaviour
         if (NetworkManager.Singleton != null) NetworkManager.Singleton.Shutdown();
         MatchmakingService.ResetStatics();
     }
-
-    //[ServerRpc(RequireOwnership = false)]
-    //private void LeaveLobbyServerRpc()
-    //{
-    //    LeaveLobbyClientRpc();
-    //    // OnLeaveLobby();
-
-    //    GlobalVariable.Instance.OnReload = true;
-    //    string sceneName = GlobalVariable.Instance.GameMode == 1 ? Constants.LobbyScene : Constants.MainMenu;
-    //    SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
-    //}
 
     [ClientRpc]
     private void LeaveLobbyClientRpc()

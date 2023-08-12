@@ -47,6 +47,7 @@ public class SyncHealthBar : NetworkBehaviour
         {
             m_PlayersTracking.RemovePlayer(OwnerClientId);
         }
+        FindObjectOfType<GameManager>()?.OnRemovePlayer(OwnerClientId);
         base.OnDestroy();
     }
 
