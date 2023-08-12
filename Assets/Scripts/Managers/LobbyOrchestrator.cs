@@ -187,6 +187,7 @@ public class LobbyOrchestrator : NetworkBehaviour
 
     private async void OnLobbyLeft()
     {
+        if (IsServer) OnLobbyLeftClientRpc();
         // using (new Load("Leaving Lobby...")) {
         MatchmakingService._playersInLobby.Clear();
         NetworkManager.Singleton.Shutdown();
@@ -205,8 +206,17 @@ public class LobbyOrchestrator : NetworkBehaviour
         OnLobbyLeft();
     }
 
+    [ClientRpc]
+    private void OnLobbyLeftClientRpc()
+    {
+        if (IsServer) return;
+        Debug.Log("=== Left Lobby ===");
+        _createScreen.OnBackButton();
+    }
+
     public override void OnDestroy()
     {
+        OnLobbyLeft();
         base.OnDestroy();
         CreateLobbyScreen.LobbyCreated -= CreateLobby;
         LobbyRoomPanel.LobbySelected -= OnLobbySelected;
@@ -218,7 +228,6 @@ public class LobbyOrchestrator : NetworkBehaviour
         {
             NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnectCallback;
         }
-        // OnLobbyLeft();
     }
 
     private async void OnGameStart()

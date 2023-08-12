@@ -10,6 +10,7 @@ public class CreateLobbyScreen : MonoBehaviour
     [SerializeField] private TMP_InputField _nameInput, _maxPlayersInput;
     [SerializeField] private TMP_Dropdown _roundDropdown;
     [SerializeField] private Button _createButton;
+    [SerializeField] private Button _backButton;
 
     public static event Action<LobbyData> LobbyCreated;
 
@@ -63,6 +64,11 @@ public class CreateLobbyScreen : MonoBehaviour
         };
 
         LobbyCreated?.Invoke(lobbyData);
+    }
+
+    public void OnBackButton()
+    {
+        _backButton.onClick.Invoke();
     }
 }
 

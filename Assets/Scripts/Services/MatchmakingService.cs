@@ -122,7 +122,7 @@ public static class MatchmakingService {
                 _currentLobby = null;
             }
             catch (Exception e) {
-                Debug.Log(e);
+                // Debug.Log(e);
             }
     }
 }
