@@ -56,6 +56,12 @@ public class PlayerSetting : MonoBehaviour
         _playerNameInputField.text = CurrenPlayerData.Instance.Name;
     }
 
+    private void OnDisable()
+    {
+        foreach (Transform child in _colorGridLayoutGroup.transform) Destroy(child.gameObject);
+        foreach (Transform child in _avatarParent) Destroy(child.gameObject);
+    }
+
     public void OnPlayerNameEntered()
     {
         CurrenPlayerData.Instance.Name = _playerNameInputField.text;

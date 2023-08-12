@@ -10,6 +10,7 @@ public class CreateLobbyScreen : MonoBehaviour
     [SerializeField] private TMP_InputField _nameInput, _maxPlayersInput;
     [SerializeField] private TMP_Dropdown _roundDropdown;
     [SerializeField] private Button _createButton;
+    [SerializeField] private Button _backButton;
 
     public static event Action<LobbyData> LobbyCreated;
 
@@ -35,6 +36,12 @@ public class CreateLobbyScreen : MonoBehaviour
         _maxPlayersInput.onValidateInput += delegate (string input, int charIndex, char addedChar) { return ValidateChar(addedChar); };
     }
 
+    private void OnDisable()
+    {
+        _createButton.onClick.RemoveAllListeners();
+        _maxPlayersInput.onValidateInput -= delegate (string input, int charIndex, char addedChar) { return ValidateChar(addedChar); };
+    }
+
     private char ValidateChar(char charToValidate)
     {
         if (char.IsNumber(charToValidate)) return charToValidate;
@@ -57,6 +64,11 @@ public class CreateLobbyScreen : MonoBehaviour
         };
 
         LobbyCreated?.Invoke(lobbyData);
+    }
+
+    public void OnBackButton()
+    {
+        _backButton.onClick.Invoke();
     }
 }
 
