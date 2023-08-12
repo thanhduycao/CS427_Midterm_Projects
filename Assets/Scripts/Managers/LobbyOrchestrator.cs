@@ -191,6 +191,7 @@ public class LobbyOrchestrator : NetworkBehaviour
         MatchmakingService._playersInLobby.Clear();
         NetworkManager.Singleton.Shutdown();
         await MatchmakingService.LeaveLobby();
+        MatchmakingService.ResetStatics();
         // }
     }
 
@@ -202,7 +203,6 @@ public class LobbyOrchestrator : NetworkBehaviour
     public void OnBackClick()
     {
         OnLobbyLeft();
-        MatchmakingService.ResetStatics();
     }
 
     public override void OnDestroy()

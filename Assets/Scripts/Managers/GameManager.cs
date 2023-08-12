@@ -220,22 +220,19 @@ public class GameManager : NetworkBehaviour
 
     public override void OnDestroy()
     {
-        //if (m_PlayerState.ContainsKey(NetworkManager.Singleton.LocalClientId))
-        //{
-        //    m_PlayerState.Remove(NetworkManager.Singleton.LocalClientId);
-        //}
-
         OnGameDestroy?.Invoke();
-        base.OnDestroy();
 
         if (!GameFinished)
             LeaveLobby();
+
+        base.OnDestroy();
     }
 
     public async void LeaveLobby()
     {
         await MatchmakingService.LeaveLobby();
         if (NetworkManager.Singleton != null) NetworkManager.Singleton.Shutdown();
+        MatchmakingService.ResetStatics();
     }
 
     [ServerRpc(RequireOwnership = false)]

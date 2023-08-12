@@ -35,6 +35,12 @@ public class CreateLobbyScreen : MonoBehaviour
         _maxPlayersInput.onValidateInput += delegate (string input, int charIndex, char addedChar) { return ValidateChar(addedChar); };
     }
 
+    private void OnDisable()
+    {
+        _createButton.onClick.RemoveAllListeners();
+        _maxPlayersInput.onValidateInput -= delegate (string input, int charIndex, char addedChar) { return ValidateChar(addedChar); };
+    }
+
     private char ValidateChar(char charToValidate)
     {
         if (char.IsNumber(charToValidate)) return charToValidate;
