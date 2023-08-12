@@ -4,6 +4,8 @@ public class GlobalVariable : MonoBehaviour
 {
     public static GlobalVariable Instance { get; private set; }
 
+    [SerializeField] private ConfigAvatarData m_AvatarData;
+
     public void Awake()
     {
         if (Instance == null)
@@ -29,5 +31,17 @@ public class GlobalVariable : MonoBehaviour
             if (value >= 0 && value < Constants.Rounds.Count) round = value;
             else round = -1;
         }
+    }
+
+    public AvatarData[] Avatars => m_AvatarData.avatars;
+
+    public AvatarData GetAvatar(int avatar)
+    {
+        return m_AvatarData.GetAvatar(avatar);
+    }
+
+    public int AvatarCount()
+    {
+        return m_AvatarData.Count();
     }
 }
