@@ -221,6 +221,7 @@ public class LobbyOrchestrator : NetworkBehaviour
 
     public override void OnDestroy()
     {
+        Debug.Log("=== Destroying Orchestrator ===");
         base.OnDestroy();
         CreateLobbyScreen.LobbyCreated -= CreateLobby;
         LobbyRoomPanel.LobbySelected -= OnLobbySelected;
@@ -231,6 +232,8 @@ public class LobbyOrchestrator : NetworkBehaviour
         if (NetworkManager.Singleton != null)
         {
             NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnectCallback;
+            NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnectedCallback;
+            // NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnectCallback;
         }
     }
 

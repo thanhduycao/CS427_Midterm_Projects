@@ -43,8 +43,9 @@ public class SettingButtonController : MonoBehaviour
 
     private void OnQuitSetting()
     {
+        FindObjectOfType<GameManager>().LeaveLobby();
         FindObjectOfType<GameManager>().OnDestroy();
-        SceneManager.LoadScene("Lobby", LoadSceneMode.Single);
+        SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
     }
 
     private void OnCloseSetting()
