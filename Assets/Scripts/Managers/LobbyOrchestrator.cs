@@ -214,9 +214,13 @@ public class LobbyOrchestrator : NetworkBehaviour
         _createScreen.OnBackButton();
     }
 
-    public override void OnDestroy()
+    private void OnApplicationQuit()
     {
         OnLobbyLeft();
+    }
+
+    public override void OnDestroy()
+    {
         base.OnDestroy();
         CreateLobbyScreen.LobbyCreated -= CreateLobby;
         LobbyRoomPanel.LobbySelected -= OnLobbySelected;
