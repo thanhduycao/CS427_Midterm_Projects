@@ -5,7 +5,8 @@ using UnityEngine.UI;
 public class LobbyPlayerPanel : MonoBehaviour
 {
     [SerializeField] private TMP_Text _nameText, _statusText;
-    [SerializeField] private RawImage _rawImage;
+    [SerializeField] private RawImage _backgroundColor;
+    [SerializeField] private RawImage _avatarImage;
 
     public ulong PlayerId { get; private set; }
 
@@ -21,6 +22,7 @@ public class LobbyPlayerPanel : MonoBehaviour
         SetReady(playerData.Ready);
         SetName(playerData.Name);
         SetColor(playerData.Color);
+        SetAvatar(GlobalVariable.Instance.GetAvatar(playerData.Avatar).AvatarSprite);
     }
 
     public void SetReady(bool ready)
@@ -44,6 +46,11 @@ public class LobbyPlayerPanel : MonoBehaviour
 
     public void SetColor(Color color)
     {
-        _rawImage.color = color;
+        _backgroundColor.color = color;
+    }
+
+    public void SetAvatar(Sprite sprite)
+    {
+        _avatarImage.texture = sprite.texture;
     }
 }
