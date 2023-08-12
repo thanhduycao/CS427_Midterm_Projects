@@ -37,11 +37,13 @@ public class MainMenuManager : MonoBehaviour
 
     public void OnClickPlayMutliplayer()
     {
+        GlobalVariable.Instance.GameMode = 1;
         _authenticationManager.LoginAnonymously();
     }
 
     public void OnClickPlayOffline()
     {
+        GlobalVariable.Instance.GameMode = 0;
         NetworkManager.Singleton.StartHost();
         NetworkManager.Singleton.SceneManager.LoadScene(Constants.Rounds[1], LoadSceneMode.Single);
     }

@@ -103,13 +103,13 @@ public class EnemyController : MovementController
             if (m_EnemyTransform.localPosition.x < _moveStartX)
             {
                 movement = 1;
-                m_EnemyTransform.localPosition = new Vector3(_moveStartX, m_EnemyTransform.localPosition.y, _moveEndY);
+                m_EnemyTransform.localPosition = new Vector3(_moveStartX, _moveStartY, 0);
             }
             
             if (m_EnemyTransform.localPosition.x > _moveEndX)
             {
                 movement = -1;
-                m_EnemyTransform.localPosition = new Vector3(_moveEndX, m_EnemyTransform.localPosition.y, _moveEndY);
+                m_EnemyTransform.localPosition = new Vector3(_moveEndX, _moveStartY, 0);
             }
 
             Move(movement * movementSpeed * Time.deltaTime, false, false, false);

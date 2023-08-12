@@ -11,9 +11,16 @@ public class PlayerSetting : MonoBehaviour
     [SerializeField] private RawImage _colorPreview;
     [SerializeField] private RawImage _avatarPreview;
     [SerializeField] private Transform _avatarParent;
+    [SerializeField] private Button _saveButton;
 
     private void OnEnable()
     {
+        // set default
+        CurrenPlayerData.Instance.Color = CurrenPlayerData.Instance.Color == Color.white ? Color.white : CurrenPlayerData.Instance.Color;
+        string _name = NVJOBNameGen.Uppercase(NVJOBNameGen.GiveAName(5));
+        CurrenPlayerData.Instance.Name = CurrenPlayerData.Instance.Name == "Unknown" ? _name : CurrenPlayerData.Instance.Name;
+        _playerNameInputField.text = CurrenPlayerData.Instance.Name;
+
         foreach (Transform child in _colorGridLayoutGroup.transform) Destroy(child.gameObject);
         foreach (Transform child in _avatarParent) Destroy(child.gameObject);
 
@@ -48,12 +55,6 @@ public class PlayerSetting : MonoBehaviour
                 });
             }
         }
-
-        // set default
-        CurrenPlayerData.Instance.Color = CurrenPlayerData.Instance.Color == Color.white ? Color.white : CurrenPlayerData.Instance.Color;
-        string _name = NVJOBNameGen.Uppercase(NVJOBNameGen.GiveAName(5));
-        CurrenPlayerData.Instance.Name = CurrenPlayerData.Instance.Name == "Unknown" ? _name : CurrenPlayerData.Instance.Name;
-        _playerNameInputField.text = CurrenPlayerData.Instance.Name;
     }
 
     private void OnDisable()

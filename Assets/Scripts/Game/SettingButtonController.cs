@@ -45,7 +45,10 @@ public class SettingButtonController : MonoBehaviour
     {
         FindObjectOfType<GameManager>().LeaveLobby();
         FindObjectOfType<GameManager>().OnDestroy();
-        SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
+
+        GlobalVariable.Instance.OnReload = true;
+        string sceneName = GlobalVariable.Instance.GameMode == 1 ? Constants.LobbyScene : Constants.MainMenu;
+        SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
     }
 
     private void OnCloseSetting()
