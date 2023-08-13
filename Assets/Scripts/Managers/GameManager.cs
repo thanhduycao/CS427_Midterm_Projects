@@ -191,7 +191,7 @@ public class GameManager : NetworkBehaviour
 
     public void OnRemovePlayer(ulong clientId)
     {
-        if (_isQuitting) return;
+        if (_isQuitting && IsServer) return;
         OnRemovePlayerServerRpc(clientId);
     }
 
@@ -276,7 +276,7 @@ public class GameManager : NetworkBehaviour
 
     public override void OnDestroy()
     {
-        if (_isQuitting || !GameFinished)
+        if ((_isQuitting && IsServer) || !GameFinished)
             LeaveLobby();
         OnGameDestroy?.Invoke();
         base.OnDestroy();
