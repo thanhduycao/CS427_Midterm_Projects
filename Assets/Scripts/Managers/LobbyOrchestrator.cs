@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Unity.Netcode;
 using Unity.Services.Authentication;
+using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -19,6 +20,11 @@ public class LobbyOrchestrator : NetworkBehaviour
 
     private void Start()
     {
+        if (GlobalVariable.Instance.OnReload)
+        {
+            Lobbies.Instance.RemovePlayerAsync(GlobalVariable.Instance.LobbyCode, CurrenPlayerData.Instance.Id.ToString());
+        }
+
         _mainLobbyScreen.gameObject.SetActive(GlobalVariable.Instance.OnReload);
         _createScreen.gameObject.SetActive(false);
         _roomScreen.gameObject.SetActive(false);

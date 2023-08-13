@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Unity.Netcode;
+using Unity.Services.Lobbies;
+using Unity.Services.Relay;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -35,6 +37,12 @@ public class GameManager : NetworkBehaviour
     private NetworkVariable<bool> _gameLooser = new NetworkVariable<bool>(false);
 
     public Action OnGameDestroy;
+    public Action OnLeaveGame;
+
+    public delegate void OnRemovePlayerHandle(ulong clientId);
+    public event OnRemovePlayerHandle OnRemovePlayerEvent;
+
+    private bool _isQuitting = false;
 
     public int NumberOfPlayers { get => _numberOfPlayers.Value; set => _numberOfPlayers.Value = value; }
     public int NumberOfPlayersFinished
@@ -66,9 +74,9 @@ public class GameManager : NetworkBehaviour
     public bool GameStarted { get => _gameStarted.Value; set => _gameStarted.Value = value; }
     public bool GamePaused { get => _gamePaused.Value; set => _gamePaused.Value = value; }
     public bool GameEnded { get => _gameEnded.Value; set => _gameEnded.Value = value; }
-    public bool AllPlayersFinished { get => NumberOfPlayersFinished == NumberOfPlayers; }
+    public bool AllPlayersFinished { get => NumberOfPlayersFinished == NumberOfPlayers && NumberOfPlayers != 0; }
     public bool AllPlayersDead { get => NumberOfPlayersAlive == 0; }
-    public bool GameFinished { get => AllPlayersFinished || AllPlayersDead; }
+    public bool GameFinished { get => AllPlayersFinished; }
     // ~Game State
 
 
@@ -137,7 +145,10 @@ public class GameManager : NetworkBehaviour
 
     public void OnGameQuit()
     {
-        LeaveLobby();
+        _isQuitting = true;
+        OnLeaveGame.Invoke();
+        //LeaveLobby();
+        Destroy(gameObject);
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -190,20 +201,32 @@ public class GameManager : NetworkBehaviour
         {
             m_PlayerState.Remove(clientId);
         }
+
+        // MatchmakingService._playersInLobby
+        if (MatchmakingService._playersInLobby.ContainsKey(clientId))
+        {
+            MatchmakingService._playersInLobby.Remove(clientId);
+        }
+
         NumberOfPlayers = m_PlayerState.Count;
+        // Lobbies.Instance.RemovePlayerAsync(GlobalVariable.Instance.LobbyCode, OwnerClientId.ToString());
         OnPlayerStateChangedServerRpc();
         OnRemovePlayerClientRpc(clientId);
+        _PlayersTracking?.RemovePlayer(clientId);
+        OnRemovePlayerEvent?.Invoke(clientId);
     }
 
     [ClientRpc]
     private void OnRemovePlayerClientRpc(ulong clientId)
     {
+        if (IsServer) return;
         if (!IsServer) return;
         if (m_PlayerState.ContainsKey(clientId))
         {
             m_PlayerState.Remove(clientId);
         }
         // NumberOfPlayers = m_PlayerState.Count;
+        _PlayersTracking?.RemovePlayer(clientId);
     }
 
     public void UpdatePlayerState(PlayerState playerState)
@@ -252,20 +275,23 @@ public class GameManager : NetworkBehaviour
 
     public override void OnDestroy()
     {
-        OnGameDestroy?.Invoke();
-
-        if (!GameFinished)
+        if (_isQuitting || !GameFinished)
             LeaveLobby();
-
+        OnGameDestroy?.Invoke();
         base.OnDestroy();
     }
 
     public void LeaveLobby()
     {
-        if (IsServer) LeaveLobbyClientRpc();
+        //if (!IsOwner) return;
+        if (IsServer)
+        {
+            LeaveLobbyClientRpc();
+        }
         else
         {
-            OnRemovePlayer(OwnerClientId);
+            // Lobbies.Instance.RemovePlayerAsync(GlobalVariable.Instance.LobbyCode, OwnerClientId.ToString());
+            // OnRemovePlayerServerRpc(OwnerClientId);
             GlobalVariable.Instance.OnReload = true;
             string sceneName = GlobalVariable.Instance.GameMode == 1 ? Constants.LobbyScene : Constants.MainMenu;
             SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
@@ -276,7 +302,7 @@ public class GameManager : NetworkBehaviour
     public async void OnLeaveLobby()
     {
         await MatchmakingService.LeaveLobby();
-        if (NetworkManager.Singleton != null) NetworkManager.Singleton.Shutdown();
+        if (NetworkManager.Singleton != null) NetworkManager.Singleton.Shutdown(true);
         MatchmakingService.ResetStatics();
     }
 
