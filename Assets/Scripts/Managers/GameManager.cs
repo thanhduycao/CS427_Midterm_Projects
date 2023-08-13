@@ -146,7 +146,7 @@ public class GameManager : NetworkBehaviour
     public void OnGameQuit()
     {
         _isQuitting = true;
-        OnLeaveGame.Invoke();
+        OnLeaveGame?.Invoke();
         //LeaveLobby();
         Destroy(gameObject);
     }
@@ -191,6 +191,7 @@ public class GameManager : NetworkBehaviour
 
     public void OnRemovePlayer(ulong clientId)
     {
+        if (_isQuitting) return;
         OnRemovePlayerServerRpc(clientId);
     }
 
@@ -292,6 +293,7 @@ public class GameManager : NetworkBehaviour
         {
             // Lobbies.Instance.RemovePlayerAsync(GlobalVariable.Instance.LobbyCode, OwnerClientId.ToString());
             // OnRemovePlayerServerRpc(OwnerClientId);
+            // _ = MatchmakingService.RemovePlayer();
             GlobalVariable.Instance.OnReload = true;
             string sceneName = GlobalVariable.Instance.GameMode == 1 ? Constants.LobbyScene : Constants.MainMenu;
             SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
