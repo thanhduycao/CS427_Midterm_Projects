@@ -38,6 +38,7 @@ public class GlobalVariable : MonoBehaviour
     private int gameMode = 0; // 0: offline, 1: online
     private int round = 0; // round number
     private bool onReload = false;
+    private string lobbyCode = "";
 
     public int GameMode { get => gameMode; set => gameMode = value; }
     public int Round
@@ -54,6 +55,8 @@ public class GlobalVariable : MonoBehaviour
     {
         get => onReload; set { onReload = value; if (onReload) CurrenPlayerData.Instance.Ready = false; }
     }
+
+    public string LobbyCode { get => lobbyCode; set => lobbyCode = value; }
 
     public PlayerController PlayerPrefab => m_PlayerPrefab;
 

@@ -11,6 +11,8 @@ public class SyncHealthBar : NetworkBehaviour
     private PlayerState m_playerState;
     private float _nextRefreshTime;
 
+    private bool _setCallback = false;
+
     private void Awake()
     {
         m_HealControler = GetComponent<HealthControler>();
@@ -27,8 +29,14 @@ public class SyncHealthBar : NetworkBehaviour
             m_playerState = FindObjectOfType<GameManager>()?.GetPlayerState(OwnerClientId);
             if (m_playerState != null)
             {
-                // m_playerState.OnValueChange += OnPlayerStateChange;
-                FindObjectOfType<GameManager>().OnGameDestroy += OnGameDestroy;
+                if (!_setCallback && IsOwner)
+                {
+                    m_playerState.OnValueChange += OnPlayerStateChange;
+                    FindObjectOfType<GameManager>().OnGameDestroy += OnGameDestroy;
+                    FindObjectOfType<GameManager>().OnLeaveGame += OnLeaveGame;
+                    FindObjectOfType<GameManager>().OnRemovePlayerEvent += OnRemovePlayer;
+                    _setCallback = true;
+                }
                 m_HealControler.SetPlayerName(m_playerState.Name);
                 m_HealControler.SetColor(m_playerState.Color);
                 m_Animator.runtimeAnimatorController = GlobalVariable.Instance.GetAvatar(m_playerState.Avatar).AvatarAnimator;
@@ -41,13 +49,37 @@ public class SyncHealthBar : NetworkBehaviour
         Destroy(gameObject);
     }
 
+    public void OnLeaveGame()
+    {
+        OnDestroyPlayer();
+    }
+
+    public void OnRemovePlayer(ulong clientId)
+    {
+        if (m_playerState != null && clientId == m_playerState.Id)
+        {
+            OnDestroyPlayer();
+        }
+    }
+
     public override void OnDestroy()
     {
+        OnDestroyPlayer();
+        base.OnDestroy();
+    }
+
+    public void OnDestroyPlayer()
+    {
+        if (m_playerState != null)
+        {
+            m_playerState.OnValueChange -= OnPlayerStateChange;
+        }
         if (m_PlayersTracking != null)
         {
             m_PlayersTracking.RemovePlayer(OwnerClientId);
         }
-        base.OnDestroy();
+        //FindObjectOfType<GameManager>().OnRemovePlayerEvent -= OnRemovePlayer;
+        FindObjectOfType<GameManager>()?.OnRemovePlayer(OwnerClientId);
     }
 
     private void PropagateToClients()
