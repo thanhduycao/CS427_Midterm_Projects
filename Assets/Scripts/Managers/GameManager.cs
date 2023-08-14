@@ -325,7 +325,9 @@ public class GameManager : NetworkBehaviour
     public void LeaveLobby()
     {
         //if (!IsOwner) return;
-        LeaveLobbyClientRpc();
+        Debug.Log("===== LEAVE LOBBY =====");
+        if (IsServer) LeaveLobbyClientRpc();
+        else ChangeScene();
     }
 
     public async void OnLeaveLobby()
@@ -337,6 +339,11 @@ public class GameManager : NetworkBehaviour
 
     [ClientRpc]
     private void LeaveLobbyClientRpc()
+    {
+        ChangeScene();
+    }
+
+    private void ChangeScene()
     {
         GlobalVariable.Instance.OnReload = true;
         string sceneName = GlobalVariable.Instance.GameMode == 1 ? Constants.LobbyScene : Constants.MainMenu;
