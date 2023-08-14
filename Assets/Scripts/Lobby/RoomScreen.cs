@@ -51,12 +51,14 @@ public class RoomScreen : MonoBehaviour {
         LobbyOrchestrator.LobbyPlayersUpdated += NetworkLobbyPlayersUpdated;
         MatchmakingService.CurrentLobbyRefreshed += OnCurrentLobbyRefreshed;
         _startButton.SetActive(false);
-        _readyButton.SetActive(false);
+        _readyButton.SetActive(true);
 
         _ready = false;
     }
 
     private void OnDisable() {
+        _startButton.SetActive(true);
+        _readyButton.SetActive(true);
         LobbyOrchestrator.LobbyPlayersUpdated -= NetworkLobbyPlayersUpdated;
         MatchmakingService.CurrentLobbyRefreshed -= OnCurrentLobbyRefreshed;
     }

@@ -53,16 +53,16 @@ public class SyncHealthBar : NetworkBehaviour
 
     public void OnGameDestroy()
     {
-        // Destroy(gameObject);
+        Destroy(gameObject);
     }
 
     public void DeSpawn(ulong clientId, Vector3 positon)
     {
         if (clientId != OwnerClientId) return;
-        Debug.Log($"DeSpawn {clientId} - {positon}");
         transform.position = positon;
 
         // reset player state
+        m_playerState.OnValueChange += OnPlayerStateChange;
         m_playerState.Health = 100;
     }
 
@@ -100,7 +100,7 @@ public class SyncHealthBar : NetworkBehaviour
         {
             m_PlayersTracking.RemovePlayer(OwnerClientId);
         }
-        FindObjectOfType<SettingButtonController>().OnQuitButtonClicked -= OnGameQuit;
+        //FindObjectOfType<SettingButtonController>().OnQuitButtonClicked -= OnGameQuit;
         //FindObjectOfType<GameManager>().OnRemovePlayerEvent -= OnRemovePlayer;
         //FindObjectOfType<GameManager>()?.OnRemovePlayer(OwnerClientId);
     }
