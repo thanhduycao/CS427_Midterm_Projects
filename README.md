@@ -23,7 +23,7 @@ This is the repository for the midterm project of CS427 course about 2D game dev
 - [Pixel Adventure](https://pixelfrog-assets.itch.io/pixel-adventure-1) for characters, objects, tilesets, items, etc.
 - [Pixel Adventure 2](https://pixelfrog-assets.itch.io/pixel-adventure-2) for enemy characters.
 
-## Acknowledgments
+## References
 
 - Unity - [unity.com](https://unity.com/)
 - Astar - [arongranberg.com/astar](https://arongranberg.com/astar)
@@ -31,3 +31,4 @@ This is the repository for the midterm project of CS427 course about 2D game dev
 - Relay - [unity.com/products/relay](https://unity.com/products/relay)
 - Netcode for GameObjects - [unity.com/products/netcode](https://unity.com/products/netcode)
 - Multiplayer Samples Utilities - [com.unity.multiplayer.samples.coop](https://github.com/Unity-Technologies/com.unity.multiplayer.samples.coop)
+- 2D Character Controller - [https://github.com/Brackeys/2D-Character-Controller]
