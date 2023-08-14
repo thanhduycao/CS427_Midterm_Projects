@@ -34,6 +34,7 @@ namespace DialogSystem
                 for (int i = 0; i < line.text.Length; ++i)
                 {
                     textHolder.text += line.text[i];
+                    SoundManager.instance.Play(SoundData.Sound.Dialog);
                     if (finished == true)
                     {
                         textHolder.text = line.text;
