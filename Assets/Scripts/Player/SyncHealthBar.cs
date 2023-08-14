@@ -53,17 +53,20 @@ public class SyncHealthBar : NetworkBehaviour
 
     public void OnGameDestroy()
     {
+        if (gameObject != null)
         Destroy(gameObject);
     }
 
     public void DeSpawn(ulong clientId, Vector3 positon)
     {
+        if (!IsOwner) return;
         if (clientId != OwnerClientId) return;
         transform.position = positon;
 
         // reset player state
-        m_playerState.OnValueChange += OnPlayerStateChange;
+        // m_playerState.OnValueChange += OnPlayerStateChange;
         m_playerState.Health = 100;
+        m_playerState.IsFinished = false;
     }
 
     public void OnLeaveGame()

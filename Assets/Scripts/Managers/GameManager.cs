@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Playables;
 using UnityEngine.SceneManagement;
 
 public class GameManager : NetworkBehaviour
@@ -146,11 +147,6 @@ public class GameManager : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void DeSpawnServerRpc()
     {
-        foreach (ulong playerId in _playersPrefab.Keys)
-        {
-            DeSpanClientRpc(playerId);
-        }
-
         // clean up game state
         NumberOfPlayersFinished = 0;
         NumberOfPlayersAlive = NumberOfPlayers;
@@ -158,6 +154,16 @@ public class GameManager : NetworkBehaviour
         GameStarted = true;
         GamePaused = false;
         GameLooser = false;
+
+        foreach (ulong playerId in _playersPrefab.Keys)
+        {
+            DeSpanClientRpc(playerId);
+
+            // reset player state
+            //m_PlayerState[playerId].Health = 100;
+            //m_PlayerState[playerId].IsFinished = false;
+            //UpdatePlayerStateClientRpc(m_PlayerState[playerId]);
+        }
     }
 
     [ClientRpc]
@@ -322,10 +328,17 @@ public class GameManager : NetworkBehaviour
         base.OnDestroy();
     }
 
+    private void OnApplicationQuit()
+    {
+        OnGameQuit();
+    }
+
     public void LeaveLobby()
     {
         //if (!IsOwner) return;
-        LeaveLobbyClientRpc();
+        Debug.Log("===== LEAVE LOBBY =====");
+        if (IsServer) LeaveLobbyClientRpc();
+        else ChangeScene();
     }
 
     public async void OnLeaveLobby()
@@ -338,9 +351,17 @@ public class GameManager : NetworkBehaviour
     [ClientRpc]
     private void LeaveLobbyClientRpc()
     {
-        GlobalVariable.Instance.OnReload = true;
-        string sceneName = GlobalVariable.Instance.GameMode == 1 ? Constants.LobbyScene : Constants.MainMenu;
-        SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
+        ChangeScene();
+    }
+
+    private void ChangeScene()
+    {
+        if (GlobalVariable.Instance != null)
+        {
+            GlobalVariable.Instance.OnReload = true;
+            string sceneName = GlobalVariable.Instance.GameMode == 1 ? Constants.LobbyScene : Constants.MainMenu;
+            SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
+        }
         OnLeaveLobby();
     }
 
