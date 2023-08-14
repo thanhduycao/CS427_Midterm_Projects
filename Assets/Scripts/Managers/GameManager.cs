@@ -181,7 +181,7 @@ public class GameManager : NetworkBehaviour
         Debug.Log("===== GAME QUIT =====");
         _isQuitting = true;
         OnLeaveGame?.Invoke();
-        //LeaveLobby();
+        if (!IsServer && IsOwner) LeaveLobby();
         Destroy(gameObject);
     }
 
@@ -325,27 +325,14 @@ public class GameManager : NetworkBehaviour
     public void LeaveLobby()
     {
         //if (!IsOwner) return;
-        if (IsServer)
-        {
-            LeaveLobbyClientRpc();
-        }
-        else
-        {
-            // Lobbies.Instance.RemovePlayerAsync(GlobalVariable.Instance.LobbyCode, OwnerClientId.ToString());
-            // OnRemovePlayerServerRpc(OwnerClientId);
-            // _ = MatchmakingService.RemovePlayer();
-            GlobalVariable.Instance.OnReload = true;
-            string sceneName = GlobalVariable.Instance.GameMode == 1 ? Constants.LobbyScene : Constants.MainMenu;
-            SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
-        }
-        OnLeaveLobby();
+        LeaveLobbyClientRpc();
     }
 
     public async void OnLeaveLobby()
     {
         await MatchmakingService.LeaveLobby();
-        if (NetworkManager.Singleton != null) NetworkManager.Singleton.Shutdown(true);
-        MatchmakingService.ResetStatics();
+        if (NetworkManager.Singleton != null) NetworkManager.Singleton.Shutdown();
+        if (!IsServer) MatchmakingService.ResetStatics();
     }
 
     [ClientRpc]
@@ -354,6 +341,7 @@ public class GameManager : NetworkBehaviour
         GlobalVariable.Instance.OnReload = true;
         string sceneName = GlobalVariable.Instance.GameMode == 1 ? Constants.LobbyScene : Constants.MainMenu;
         SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
+        OnLeaveLobby();
     }
 
     [ServerRpc(RequireOwnership = false)]
