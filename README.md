@@ -7,12 +7,9 @@
 - 20125039 - Tran Minh Nam
 - 20125090 - Cao Thanh Duy
 
-## Introduction
+## Game Story
 
 In a world swallowed by darkness, you're the chosen hero tasked with rekindling the lost magic of the forest. Colors have faded, melodies are silenced, and creatures are tormented. As you embrace your destiny, you'll uncover forgotten flowers, wield a harmonic horn, and heal lost souls in reflection pools. Amidst your journey, a bond of compassion forms with a despairing slime, showing that empathy can conquer even the deepest pain. Together, you restore the forest's enchantment and prove the transformative power of understanding.
-
-
-
 
 ## Unity Version
 
