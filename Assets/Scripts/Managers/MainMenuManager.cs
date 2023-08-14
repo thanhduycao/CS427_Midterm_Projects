@@ -12,14 +12,14 @@ public class MainMenuManager : MonoBehaviour
     void Start()
     {
         _textWarning.text = "";
-        //if (IsInternetAvailable()) GlobalVariable.Instance.gameMode = 1;
-        //else GlobalVariable.Instance.gameMode = 0;
+        if (IsInternetAvailable()) GlobalVariable.Instance.GameMode = 1;
+        else GlobalVariable.Instance.GameMode = 0;
     }
 
-    //void Update()
-    //{
-    //    ShowDialogWarning(GlobalVariable.Instance.gameMode);
-    //}
+    void Update()
+    {
+        ShowDialogWarning(GlobalVariable.Instance.GameMode);
+    }
 
     private void ShowDialogWarning(int gameMode)
     {
@@ -37,6 +37,10 @@ public class MainMenuManager : MonoBehaviour
 
     public void OnClickPlayMutliplayer()
     {
+        if (!IsInternetAvailable())
+        {
+            return;
+        }
         GlobalVariable.Instance.GameMode = 1;
         _authenticationManager.LoginAnonymously();
     }
@@ -45,12 +49,13 @@ public class MainMenuManager : MonoBehaviour
     {
         GlobalVariable.Instance.GameMode = 0;
         NetworkManager.Singleton.StartHost();
-        NetworkManager.Singleton.SceneManager.LoadScene(Constants.Rounds[1], LoadSceneMode.Single);
+        NetworkManager.Singleton.SceneManager.LoadScene(Constants.Rounds[0], LoadSceneMode.Single);
     }
 
     [Command("StartHost")]
     public void StartHost(int screen = 0)
     {
+        GlobalVariable.Instance.GameMode = 0;
         NetworkManager.Singleton.StartHost();
         NetworkManager.Singleton.SceneManager.LoadScene(Constants.Rounds[screen], LoadSceneMode.Single);
     }
@@ -58,6 +63,7 @@ public class MainMenuManager : MonoBehaviour
     [Command("StartClient")]
     public void StartClient(int screen = 0)
     {
+        GlobalVariable.Instance.GameMode = 0;
         NetworkManager.Singleton.StartClient();
         NetworkManager.Singleton.SceneManager.LoadScene(Constants.Rounds[screen], LoadSceneMode.Single);
     }

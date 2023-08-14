@@ -368,6 +368,14 @@ public class GameManager : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void GetPlayerDataServerRpc()
     {
+        if (GlobalVariable.Instance.GameMode== 0)
+        {
+            m_PlayerState.Add(0, new PlayerState());
+            m_PlayerState[0].Id = 0;
+            m_PlayerState[0].Name = NVJOBNameGen.Uppercase(NVJOBNameGen.GiveAName(5));
+            
+        }
+        else
         foreach (KeyValuePair<ulong, PlayerData> data in MatchmakingService._playersInLobby)
         {
             if (m_PlayerState.ContainsKey(data.Key))
