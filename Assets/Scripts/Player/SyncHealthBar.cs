@@ -35,6 +35,12 @@ public class SyncHealthBar : NetworkBehaviour
                     FindObjectOfType<GameManager>().OnGameDestroy += OnGameDestroy;
                     FindObjectOfType<GameManager>().OnLeaveGame += OnLeaveGame;
                     FindObjectOfType<GameManager>().OnRemovePlayerEvent += OnRemovePlayer;
+
+                    if (!IsServer)
+                    {
+                        CurrenPlayerData.Instance.Id = OwnerClientId;
+                        FindObjectOfType<SettingButtonController>().OnQuitButtonClicked += OnGameQuit;
+                    }
                     _setCallback = true;
                 }
                 m_HealControler.SetPlayerName(m_playerState.Name);
@@ -68,6 +74,11 @@ public class SyncHealthBar : NetworkBehaviour
         base.OnDestroy();
     }
 
+    public void OnGameQuit()
+    {
+        FindObjectOfType<GameManager>()?.OnRemovePlayer(OwnerClientId);
+    }
+
     public void OnDestroyPlayer()
     {
         if (m_playerState != null)
@@ -78,8 +89,9 @@ public class SyncHealthBar : NetworkBehaviour
         {
             m_PlayersTracking.RemovePlayer(OwnerClientId);
         }
+        FindObjectOfType<SettingButtonController>().OnQuitButtonClicked -= OnGameQuit;
         //FindObjectOfType<GameManager>().OnRemovePlayerEvent -= OnRemovePlayer;
-        FindObjectOfType<GameManager>()?.OnRemovePlayer(OwnerClientId);
+        //FindObjectOfType<GameManager>()?.OnRemovePlayer(OwnerClientId);
     }
 
     private void PropagateToClients()

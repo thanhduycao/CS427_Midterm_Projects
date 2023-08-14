@@ -217,7 +217,6 @@ public class LobbyOrchestrator : NetworkBehaviour
     private void OnLobbyLeftClientRpc()
     {
         if (IsServer) return;
-        Debug.Log("=== Left Lobby ===");
         _createScreen.OnBackButton();
     }
 

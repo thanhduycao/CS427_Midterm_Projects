@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Unity.Netcode;
-using Unity.Services.Lobbies;
-using Unity.Services.Relay;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -27,14 +25,14 @@ public class GameManager : NetworkBehaviour
     private readonly Dictionary<ulong, PlayerState> m_PlayerState = new();
 
     // Game State
-    private NetworkVariable<int> _numberOfPlayers = new NetworkVariable<int>(0);
-    private NetworkVariable<int> _numberOfPlayersFinished = new NetworkVariable<int>(0);
-    private NetworkVariable<int> _numberOfPlayersAlive = new NetworkVariable<int>(0);
-    private NetworkVariable<bool> _gameStarted = new NetworkVariable<bool>(false);
-    private NetworkVariable<bool> _gamePaused = new NetworkVariable<bool>(false);
-    private NetworkVariable<bool> _gameEnded = new NetworkVariable<bool>(false);
-    private NetworkVariable<bool> _gameFinished = new NetworkVariable<bool>(false);
-    private NetworkVariable<bool> _gameLooser = new NetworkVariable<bool>(false);
+    private NetworkVariable<int> _numberOfPlayers = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    private NetworkVariable<int> _numberOfPlayersFinished = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    private NetworkVariable<int> _numberOfPlayersAlive = new NetworkVariable<int>(0, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    private NetworkVariable<bool> _gameStarted = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    private NetworkVariable<bool> _gamePaused = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    private NetworkVariable<bool> _gameEnded = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    private NetworkVariable<bool> _gameFinished = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    private NetworkVariable<bool> _gameLooser = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
     public Action OnGameDestroy;
     public Action OnLeaveGame;
@@ -78,7 +76,6 @@ public class GameManager : NetworkBehaviour
     public bool AllPlayersDead { get => NumberOfPlayersAlive == 0; }
     public bool GameFinished { get => AllPlayersFinished; }
     // ~Game State
-
 
     private void Awake()
     {
@@ -145,6 +142,7 @@ public class GameManager : NetworkBehaviour
 
     public void OnGameQuit()
     {
+        Debug.Log("===== GAME QUIT =====");
         _isQuitting = true;
         OnLeaveGame?.Invoke();
         //LeaveLobby();
@@ -192,25 +190,25 @@ public class GameManager : NetworkBehaviour
     public void OnRemovePlayer(ulong clientId)
     {
         if (_isQuitting && IsServer) return;
+        Debug.Log($"Player {clientId} is leaving the game");
         OnRemovePlayerServerRpc(clientId);
     }
 
     [ServerRpc(RequireOwnership = false)]
     private void OnRemovePlayerServerRpc(ulong clientId)
     {
+        Debug.Log($"Server: Player {clientId} is leaving the game");
         if (m_PlayerState.ContainsKey(clientId))
         {
             m_PlayerState.Remove(clientId);
         }
 
-        // MatchmakingService._playersInLobby
         if (MatchmakingService._playersInLobby.ContainsKey(clientId))
         {
             MatchmakingService._playersInLobby.Remove(clientId);
         }
 
         NumberOfPlayers = m_PlayerState.Count;
-        // Lobbies.Instance.RemovePlayerAsync(GlobalVariable.Instance.LobbyCode, OwnerClientId.ToString());
         OnPlayerStateChangedServerRpc();
         OnRemovePlayerClientRpc(clientId);
         _PlayersTracking?.RemovePlayer(clientId);
@@ -221,7 +219,7 @@ public class GameManager : NetworkBehaviour
     private void OnRemovePlayerClientRpc(ulong clientId)
     {
         if (IsServer) return;
-        if (!IsServer) return;
+        Debug.Log($"Client: Player {clientId} is leaving the game");
         if (m_PlayerState.ContainsKey(clientId))
         {
             m_PlayerState.Remove(clientId);
@@ -276,8 +274,10 @@ public class GameManager : NetworkBehaviour
 
     public override void OnDestroy()
     {
-        if ((_isQuitting && IsServer) || !GameFinished)
+        if ((_isQuitting && (IsServer || IsClient)) || (!GameFinished && IsServer))
+        {
             LeaveLobby();
+        }
         OnGameDestroy?.Invoke();
         base.OnDestroy();
     }
