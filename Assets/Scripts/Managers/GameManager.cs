@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Playables;
 using UnityEngine.SceneManagement;
 
 public class GameManager : NetworkBehaviour
@@ -146,11 +147,6 @@ public class GameManager : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void DeSpawnServerRpc()
     {
-        foreach (ulong playerId in _playersPrefab.Keys)
-        {
-            DeSpanClientRpc(playerId);
-        }
-
         // clean up game state
         NumberOfPlayersFinished = 0;
         NumberOfPlayersAlive = NumberOfPlayers;
@@ -158,6 +154,16 @@ public class GameManager : NetworkBehaviour
         GameStarted = true;
         GamePaused = false;
         GameLooser = false;
+
+        foreach (ulong playerId in _playersPrefab.Keys)
+        {
+            DeSpanClientRpc(playerId);
+
+            // reset player state
+            //m_PlayerState[playerId].Health = 100;
+            //m_PlayerState[playerId].IsFinished = false;
+            //UpdatePlayerStateClientRpc(m_PlayerState[playerId]);
+        }
     }
 
     [ClientRpc]
@@ -320,6 +326,11 @@ public class GameManager : NetworkBehaviour
         }
         OnGameDestroy?.Invoke();
         base.OnDestroy();
+    }
+
+    private void OnApplicationQuit()
+    {
+        OnGameQuit();
     }
 
     public void LeaveLobby()
