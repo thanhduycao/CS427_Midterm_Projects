@@ -57,6 +57,6 @@ public class CurrenPlayerData : NetworkBehaviour
 
     private void UpdateInterface()
     {
-        FindObjectOfType<LobbyOrchestrator>().UpdatePlayer(data);
+        FindObjectOfType<LobbyOrchestrator>()?.UpdatePlayer(data);
     }
 }

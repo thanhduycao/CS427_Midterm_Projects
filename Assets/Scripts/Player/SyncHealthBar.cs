@@ -11,6 +11,8 @@ public class SyncHealthBar : NetworkBehaviour
     private PlayerState m_playerState;
     private float _nextRefreshTime;
 
+    private bool _setCallback = false;
+
     private void Awake()
     {
         m_HealControler = GetComponent<HealthControler>();
@@ -27,8 +29,21 @@ public class SyncHealthBar : NetworkBehaviour
             m_playerState = FindObjectOfType<GameManager>()?.GetPlayerState(OwnerClientId);
             if (m_playerState != null)
             {
-                // m_playerState.OnValueChange += OnPlayerStateChange;
-                FindObjectOfType<GameManager>().OnGameDestroy += OnGameDestroy;
+                if (!_setCallback && IsOwner)
+                {
+                    m_playerState.OnValueChange += OnPlayerStateChange;
+                    FindObjectOfType<GameManager>().OnGameDestroy += OnGameDestroy;
+                    FindObjectOfType<GameManager>().OnLeaveGame += OnLeaveGame;
+                    FindObjectOfType<GameManager>().OnRemovePlayerEvent += OnRemovePlayer;
+                    FindObjectOfType<GameManager>().OnDeSpawnPlayerEvent += DeSpawn;
+
+                    if (!IsServer)
+                    {
+                        CurrenPlayerData.Instance.Id = OwnerClientId;
+                        FindObjectOfType<SettingButtonController>().OnQuitButtonClicked += OnGameQuit;
+                    }
+                    _setCallback = true;
+                }
                 m_HealControler.SetPlayerName(m_playerState.Name);
                 m_HealControler.SetColor(m_playerState.Color);
                 m_Animator.runtimeAnimatorController = GlobalVariable.Instance.GetAvatar(m_playerState.Avatar).AvatarAnimator;
@@ -38,16 +53,56 @@ public class SyncHealthBar : NetworkBehaviour
 
     public void OnGameDestroy()
     {
-        Destroy(gameObject);
+        // Destroy(gameObject);
+    }
+
+    public void DeSpawn(ulong clientId, Vector3 positon)
+    {
+        if (clientId != OwnerClientId) return;
+        Debug.Log($"DeSpawn {clientId} - {positon}");
+        transform.position = positon;
+
+        // reset player state
+        m_playerState.Health = 100;
+    }
+
+    public void OnLeaveGame()
+    {
+        OnDestroyPlayer();
+    }
+
+    public void OnRemovePlayer(ulong clientId)
+    {
+        if (m_playerState != null && clientId == m_playerState.Id)
+        {
+            OnDestroyPlayer();
+        }
     }
 
     public override void OnDestroy()
     {
+        OnDestroyPlayer();
+        base.OnDestroy();
+    }
+
+    public void OnGameQuit()
+    {
+        FindObjectOfType<GameManager>()?.OnRemovePlayer(OwnerClientId);
+    }
+
+    public void OnDestroyPlayer()
+    {
+        if (m_playerState != null)
+        {
+            m_playerState.OnValueChange -= OnPlayerStateChange;
+        }
         if (m_PlayersTracking != null)
         {
             m_PlayersTracking.RemovePlayer(OwnerClientId);
         }
-        base.OnDestroy();
+        FindObjectOfType<SettingButtonController>().OnQuitButtonClicked -= OnGameQuit;
+        //FindObjectOfType<GameManager>().OnRemovePlayerEvent -= OnRemovePlayer;
+        //FindObjectOfType<GameManager>()?.OnRemovePlayer(OwnerClientId);
     }
 
     private void PropagateToClients()

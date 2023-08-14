@@ -1,3 +1,4 @@
+using System;
 using Unity.Netcode;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
@@ -11,6 +12,8 @@ public class SettingButtonController : MonoBehaviour
 
     private Button m_SettingButton;
     private SettingPanel settingPanel;
+
+    public Action OnQuitButtonClicked;
 
     void Start()
     {
@@ -43,12 +46,8 @@ public class SettingButtonController : MonoBehaviour
 
     private void OnQuitSetting()
     {
-        FindObjectOfType<GameManager>().LeaveLobby();
-        FindObjectOfType<GameManager>().OnDestroy();
-
-        GlobalVariable.Instance.OnReload = true;
-        string sceneName = GlobalVariable.Instance.GameMode == 1 ? Constants.LobbyScene : Constants.MainMenu;
-        SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
+        OnQuitButtonClicked?.Invoke();
+        FindObjectOfType<GameManager>().OnGameQuit();
     }
 
     private void OnCloseSetting()
