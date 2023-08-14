@@ -44,7 +44,7 @@ public class SettingButtonController : MonoBehaviour
         m_SettingButton.onClick.RemoveAllListeners();
     }
 
-    private void OnQuitSetting()
+    public void OnQuitSetting()
     {
         if (SceneManager.GetActiveScene().name == "MainMenu")
         {
