@@ -4,6 +4,13 @@
 
 This is the repository for the midterm project of CS427 course about 2D game development.
 
+## Unity Version
+
+- Unity 2022.3.1f1
+- Lobby 1.0.3
+- Relay 1.0.5
+- Netcode for GameObjects 1.5.2
+
 ## Acknowledgments
 
 - Unity - [unity.com](https://unity.com/)
