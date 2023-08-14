@@ -27,7 +27,7 @@ public class MovementNoMana : NetworkBehaviour
 
     private bool jump = false;
     private bool fall = false;
-    private bool hit = false;
+    // private bool hit = false;
     private bool onLanded = true;
     private bool doubleJump;
     private int extraJump;

@@ -21,7 +21,7 @@ public class GameManager : NetworkBehaviour
     [SerializeField] private GameObject _gameFinishedUI = null;
     [SerializeField] private GameObject _gameLooserUI = null;
     [SerializeField] private GameObject _gameEndedUI = null;
-    [SerializeField] private GameObject _gamePausedUI = null;
+    // [SerializeField] private GameObject _gamePausedUI = null;
 
     private readonly Dictionary<ulong, PlayerState> m_PlayerState = new();
 
