@@ -40,7 +40,11 @@ public class GameManager : NetworkBehaviour
     public delegate void OnRemovePlayerHandle(ulong clientId);
     public event OnRemovePlayerHandle OnRemovePlayerEvent;
 
+    public delegate void OnDeSpawnPlayerHandle(ulong clientId, Vector3 position);
+    public event OnDeSpawnPlayerHandle OnDeSpawnPlayerEvent;
+
     private bool _isQuitting = false;
+    private Dictionary<ulong, PlayerController> _playersPrefab = new();
 
     public int NumberOfPlayers { get => _numberOfPlayers.Value; set => _numberOfPlayers.Value = value; }
     public int NumberOfPlayersFinished
@@ -67,14 +71,20 @@ public class GameManager : NetworkBehaviour
                 _gameLooser.Value = true;
                 _gameEnded.Value = true;
             }
+            if (OnePlayerDead)
+            {
+                _gameLooser.Value = true;
+            }
         }
     }
     public bool GameStarted { get => _gameStarted.Value; set => _gameStarted.Value = value; }
     public bool GamePaused { get => _gamePaused.Value; set => _gamePaused.Value = value; }
     public bool GameEnded { get => _gameEnded.Value; set => _gameEnded.Value = value; }
+    public bool OnePlayerDead { get => NumberOfPlayersAlive != NumberOfPlayers; }
     public bool AllPlayersFinished { get => NumberOfPlayersFinished == NumberOfPlayers && NumberOfPlayers != 0; }
     public bool AllPlayersDead { get => NumberOfPlayersAlive == 0; }
     public bool GameFinished { get => AllPlayersFinished; }
+    public bool GameLooser { get => OnePlayerDead; set => _gameLooser.Value = value; }
     // ~Game State
 
     private void Awake()
@@ -129,6 +139,32 @@ public class GameManager : NetworkBehaviour
 
         if (_gameLooserUI != null)
             _gameLooserUI?.SetActive(newValue);
+
+        DeSpawnServerRpc();
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void DeSpawnServerRpc()
+    {
+        foreach (ulong playerId in _playersPrefab.Keys)
+        {
+            DeSpanClientRpc(playerId);
+        }
+
+        // clean up game state
+        NumberOfPlayersFinished = 0;
+        NumberOfPlayersAlive = NumberOfPlayers;
+        GameEnded = false;
+        GameStarted = true;
+        GamePaused = false;
+        GameLooser = false;
+    }
+
+    [ClientRpc]
+    private void DeSpanClientRpc(ulong clientId)
+    {
+        Vector3 spawnPoint = new Vector3(UnityEngine.Random.Range(_spawnStartX, _spawnEndX), UnityEngine.Random.Range(_spawnStartY, _spawnEndY), 0f);
+        OnDeSpawnPlayerEvent?.Invoke(clientId, spawnPoint);
     }
 
     private void OnGameEnded(bool oldValue, bool newValue)
@@ -208,6 +244,9 @@ public class GameManager : NetworkBehaviour
             MatchmakingService._playersInLobby.Remove(clientId);
         }
 
+        _playersPrefab[clientId].NetworkObject.Despawn(true);
+        _playersPrefab.Remove(clientId);
+
         NumberOfPlayers = m_PlayerState.Count;
         OnPlayerStateChangedServerRpc();
         OnRemovePlayerClientRpc(clientId);
@@ -270,6 +309,7 @@ public class GameManager : NetworkBehaviour
         var spawnPoint = new Vector3(UnityEngine.Random.Range(_spawnStartX, _spawnEndX), UnityEngine.Random.Range(_spawnStartY, _spawnEndY), 0f);
         var spawn = Instantiate(GlobalVariable.Instance.PlayerPrefab, spawnPoint, Quaternion.identity);
         spawn.NetworkObject.SpawnWithOwnership(playerId);
+        _playersPrefab.Add(playerId, spawn);
     }
 
     public override void OnDestroy()
