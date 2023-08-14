@@ -191,8 +191,7 @@ public class LobbyOrchestrator : NetworkBehaviour
     {
         if (IsServer) OnLobbyLeftClientRpc();
         MatchmakingService._playersInLobby.Clear();
-        //if (NetworkManager.Singleton != null) 
-        NetworkManager.Singleton.Shutdown();
+        if (NetworkManager.Singleton != null) NetworkManager.Singleton.Shutdown();
         await MatchmakingService.LeaveLobby();
 
         // We only care about this during lobby
