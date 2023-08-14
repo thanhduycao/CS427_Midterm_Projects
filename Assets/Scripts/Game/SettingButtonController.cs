@@ -46,8 +46,14 @@ public class SettingButtonController : MonoBehaviour
 
     private void OnQuitSetting()
     {
-        OnQuitButtonClicked?.Invoke();
-        FindObjectOfType<GameManager>().OnGameQuit();
+        if (SceneManager.GetActiveScene().name == "MainMenu")
+        {
+            Application.Quit();
+        } else
+        {
+            OnQuitButtonClicked?.Invoke();
+            FindObjectOfType<GameManager>().OnGameQuit();
+        }
     }
 
     private void OnCloseSetting()

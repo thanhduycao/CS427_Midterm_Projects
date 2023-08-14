@@ -5,6 +5,8 @@ using UnityEngine.UI;
 public class SettingPanel : MonoBehaviour
 {
     [SerializeField] private Button m_QuitButton;
+    [SerializeField] private Slider m_MusicSlider, m_SFXSlider;
+    [SerializeField] private Button m_ToggleMusic, m_ToggleSFX;
 
     public Action OnQuitButtonClicked;
     public Action OnOutSideClicked;
@@ -33,6 +35,28 @@ public class SettingPanel : MonoBehaviour
         xmax = (int)(x + width / 2);
         ymin = (int)(y - height / 2);
         ymax = (int)(y + height / 2);
+
+        m_MusicSlider.value = SoundManager.instance.GetMusicVolume();
+        m_SFXSlider.value = SoundManager.instance.GetSFXVolume();
+
+        m_MusicSlider.onValueChanged.AddListener((value) =>
+        {
+            SoundManager.instance.ChangeMusicVolume(value);
+        });
+        m_SFXSlider.onValueChanged.AddListener((value) =>
+        {
+            SoundManager.instance.ChangeSFXVolume(value);
+        });
+
+        m_ToggleMusic.onClick.AddListener(() =>
+        {
+            SoundManager.instance.ToggleMusic();
+        });
+
+        m_ToggleSFX.onClick.AddListener(() =>
+        {
+            SoundManager.instance.ToggleSFX();
+        });
     }
 
     private void Update()

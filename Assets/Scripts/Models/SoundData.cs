@@ -20,7 +20,8 @@ public class SoundData
         Lobby,
         Scene1,
         Scene2,
-        Scene3
+        Scene3,
+        Enemy,
     }
 
     public enum Round
@@ -42,6 +43,7 @@ public class SoundData
 
     public bool isLoop;
     public bool hasCooldown;
+    public bool isMusicSound;
     public Round roundSpecific = Round.None;
     public AudioSource source;
 }

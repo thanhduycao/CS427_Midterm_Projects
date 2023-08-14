@@ -1,125 +1,5 @@
 {
-  "round1.1": [
-    {
-      "speaker": "Player",
-      "text": "\"I hear your plea, soul of the forest.\""
-    },
-    {
-      "speaker": "Forest",
-      "text": "Thank you, kindred spirit. To bring back the colors, seek the Forgotten Flower at the Blinking Hallow. Its petals hold the essence of the spectrum, and with it, you can paint life back into this world."
-    },
-    {
-      "speaker": "Player",
-      "text": "\"I shall find the Forgotten Flower and fulfill my destiny. I won't let darkness consume this place any longer.\""
-    },
-    {
-      "speaker": "Forest",
-      "text": "Go forth, brave one, and may the magic within you guide your path. The fate of the enchanted realm rests upon your shoulders."
-    }
-  ],
-  "round1.2": [
-    {
-      "speaker": "Player",
-      "text": "The Forgotten Flower... It's even more magnificent than I imagined. Its petals shimmer with the essence of every color imaginable. This must be the key to restoring the forest's magic."
-    },
-    {
-      "speaker": "Forest",
-      "text": "The creatures and I place our trust in you. Channel the magic within you and let it flow through the petals of the Forgotten Flower. Paint the world with color once more and bring back the harmony we lost."
-    },
-    {
-      "speaker": "Player",
-      "text": "[Player touches the flower]"
-    },
-    {
-      "speaker": "Forest",
-      "text": "The magic stirs once again! I can feel it returning! You are doing it, my chosen one. The forest's heart beats with color anew. Thank you, hero."
-    },
-    {
-      "speaker": "Player",
-      "text": "\"No worries. It is my duty to bring peace to the world.\""
-    },
-    {
-      "speaker": "Forest",
-      "text": "Our forest thanks you for that. Now, let me bring you to the Whispering Glen, where our melodies were stolen away."
-    },
-    {
-      "speaker": "Player",
-      "text": "\"Let's hurry up.\""
-    },
-  ],
-  "round2.1": [
-    {
-      "speaker": "Forest",
-      "text": "Be careful, my brave one, the glen is deep and dark. Full of traps and terrors await. Many went there for adventure, but never came back. Tread gently and slowly."
-    },
-    {
-      "speaker": "Player",
-      "text": "\"I understand. I promise to bring the forest back.\""
-    },
-    {
-      "speaker": "Forest",
-      "text": "The music that once danced on the wind is now silent, leaving the creatures in despair. To restore the sounds, seek the Harmonic Horn hidden within the Whispering Glen. It holds the essence of every melody ever played in this realm.\n\nLet the magic within you guide the way, for the creatures yearn to hear the sweet melodies once more. With the Harmonic Horn, you shall be the conductor of nature's orchestra."
-    },
-    {
-      "speaker": "Player",
-      "text": "\"I won't let the darkness suffocate this forest any longer. The melodies will flow again, and harmony shall be restored.\""
-    }
-  ],
-  "round2.2": [
-    {
-      "speaker": "Forest",
-      "text": "The Harmonic Horn... You hold the key to the forest's sound. Let the melodies flow through you, and breathe life back into our world."
-    },
-    {
-      "speaker": "Player",
-      "text": "[Player sings a song using the horn]"
-    },
-    {
-      "speaker": "Player",
-      "text": "The sounds... They are returning! The birds, the insects, and the whispers of the trees - it's a symphony of nature!"
-    },
-    {
-      "speaker": "Forest",
-      "text": "Let the sound of ours heal your soul."
-    },
-    {
-      "speaker": "Player",
-      "text": "This is incredible, thank you."
-    },
-    {
-      "speaker": "Forest",
-      "text": "That is the least we can do. It's nothing compared to what you have done. Now, I sense that the end is drawing near. There is only one thing left. It's the forest's soul that lies at the heart of Luminous Glade. Let me take you there."
-    },
-    {
-      "speaker": "Player",
-      "text": "\"Please.\""
-    }
-  ],
-  "round3": [
-    {
-      "speaker": "Forest",
-      "text": "The creatures' consciousness is clouded, and they struggle to find their true selves. To heal their spirits, seek the Reflection Pools within the Luminous Glade. There, you will touch the ethereal waters that hold the reflections of their lost souls."
-    },
-    {
-      "speaker": "Player",
-      "text": "\"I will go to the Luminous Glade and help the creatures reclaim their true identities. No soul shall remain lost and in despair.\""
-    },
-    {
-      "speaker": "Forest",
-      "text": "Thank you, noble soul, for your selflessness and resolve. The creatures are desperate for someone like you to understand their struggles."
-    },
-    {
-      "speaker": "Player",
-      "text": "[Player reaches the end of Luminous Glade]"
-    },
-    {
-      "speaker": "Forest",
-      "text": "The Reflection Pool awaits you. As you touch their waters, open your heart to the creatures' experiences. With your compassion, their spirits shall find solace and their consciousness will be set free."
-    },
-    {
-      "speaker": "Player",
-      "text": "[Player touches the water]"
-    },
+  "conversation": [
     {
       "speaker": "Player",
       "text": "I see their pain, their joys, and their desires. I understand now. I shall heal their souls and free them from their burdens."
@@ -129,35 +9,11 @@
       "text": "I can feel their spirits healing, and their consciousness is no longer clouded. The forest is one with itself again."
     },
     {
-      "speaker": "Forest",
-      "text": "With every act of compassion, you have restored not just the colors and melodies, but the essence of this realm. You are the true savior of the enchanted forest, and we are forever grateful."
-    },
-    {
-      "speaker": "Player",
-      "text": "\"I don't know why but, I still feel an incredible ache. An ache of loneliness and sorrows deep inside the pool.\""
-    },
-    {
-      "speaker": "Player",
-      "text": "[Player waits a minute]"
-    },
-    {
-      "speaker": "Player",
-      "text": "\"May I?\""
-    },
-    {
-      "speaker": "Forest",
-      "text": "\"Yes, you may.\""
-    },
-    {
-      "speaker": "Player",
-      "text": "[Player jumps into the reflection pool]"
-    },
-    {
       "speaker": "Slime",
       "text": "Stay away! I don't want your pity or your kindness."
     },
     {
-      "speaker": "Player Character",
+      "speaker": "Player",
       "text": "I don't come to judge or harm you. I came to understand the pain you're carrying. I can see your sorrow, and I want to help."
     },
     {
@@ -165,7 +21,7 @@
       "text": "Why would you care?"
     },
     {
-      "speaker": "Player Character",
+      "speaker": "Player",
       "text": "We all have our struggles and pains, but that doesn't make us undeserving of kindness or empathy. You stole the forest's magic, seeking to make others understand your pain. But that's not the way to find solace. Let me help you."
     },
     {
@@ -173,12 +29,12 @@
       "text": "I don't need your pity!"
     },
     {
-      "speaker": "Player Character",
+      "speaker": "Player",
       "text": "You don't have to face this pain alone. Let me be here for you."
     },
     {
-      "speaker": "Player Character",
-      "text": "Sometimes, the only thing you need is a heart. Not an eye, nor an ear. A heart. A heart to listen, to see, and to love. Don't you see? That's why we can understand each other without having to say anything. Do you feel my heart beating against your skin? I was born by the forest. My heart beats for the forest and all of its creatures. It beats for you."
+      "speaker": "Player",
+      "text": "Sometimes, the only thing you need is a heart. Not an eye, nor an ear. A heart. A heart to listen, to see, and to love. It beats for you."
     },
     {
       "speaker": "Slime",
@@ -189,7 +45,7 @@
       "text": "..."
     },
     {
-      "speaker": "Player Character",
+      "speaker": "Player",
       "text": "You are not defined by what you are but by who you are. And I care about you, regardless of what others might think."
     },
     {
@@ -201,7 +57,7 @@
       "text": "..."
     },
     {
-      "speaker": "Player Character",
+      "speaker": "Player",
       "text": "You're not alone anymore. I'm here, and together, we will find a way to heal and bring back the magic to this forest."
     },
     {
@@ -209,7 +65,7 @@
       "text": "Thank you... for not giving up on me."
     },
     {
-      "speaker": "Player Character",
+      "speaker": "Player",
       "text": "I'll never give up on you. We're in this together now."
     },
     {
@@ -217,7 +73,7 @@
       "text": "Thank you... for caring."
     },
     {
-      "speaker": "Player Character",
+      "speaker": "Player",
       "text": "You're welcome. We'll face the future together."
     },
     {
@@ -225,7 +81,7 @@
       "text": "The bond you've forged will forever be a testament to the power of empathy and connection. The forest is healed, and so are the hearts within it. This is the true magic you've brought back to our realm. Thank you, hero."
     },
     {
-      "speaker": "Player Character",
+      "speaker": "Player",
       "text": "Thank you, Forest. And thank you, Slime. Our journey together has shown that even in the darkest of places, the light of understanding can shine."
     },
     {
@@ -237,7 +93,7 @@
       "text": "May the enchanted forest forever flourish with colors, melodies, and the echoes of compassion. Farewell, my brave friends."
     },
     {
-      "speaker": "Player Character",
+      "speaker": "Player",
       "text": "Farewell, Forest. Farewell, my friend."
     },
     {
@@ -245,7 +101,7 @@
       "text": "Farewell, and thank you."
     },
     {
-      "speaker": "Player Character",
+      "speaker": "Player",
       "text": "Our tale has ended, but the memories and lessons will live on."
     }
   ]
