@@ -31,4 +31,4 @@ This is the repository for the midterm project of CS427 course about 2D game dev
 - Relay - [unity.com/products/relay](https://unity.com/products/relay)
 - Netcode for GameObjects - [unity.com/products/netcode](https://unity.com/products/netcode)
 - Multiplayer Samples Utilities - [com.unity.multiplayer.samples.coop](https://github.com/Unity-Technologies/com.unity.multiplayer.samples.coop)
-- 2D Character Controller - [https://github.com/Brackeys/2D-Character-Controller]
+- [2D Character Controller](https://github.com/Brackeys/2D-Character-Controller)
