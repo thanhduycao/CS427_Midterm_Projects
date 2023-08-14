@@ -32,6 +32,4 @@ In a world swallowed by darkness, you're the chosen hero tasked with rekindling 
 - Netcode for GameObjects - [unity.com/products/netcode](https://unity.com/products/netcode)
 - Multiplayer Samples Utilities - [com.unity.multiplayer.samples.coop](https://github.com/Unity-Technologies/com.unity.multiplayer.samples.coop)
 - [2D Character Controller](https://github.com/Brackeys/2D-Character-Controller)
-
-## Reference
 - [Unity-Matchmaking](https://github.com/Matthew-J-Spencer/Unity-Matchmaking) for example code
