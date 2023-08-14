@@ -626,13 +626,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11500000, guid: 03710ba3cd3c1f0448215ff87e7d92ff, type: 3}
+      - m_Target: {fileID: 1636371743}
         m_TargetAssemblyTypeName: MainMenuManager, Assembly-CSharp
-        m_MethodName: 
+        m_MethodName: OnClickPlayOffline
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -2071,7 +2071,7 @@ MonoBehaviour:
   m_text: Adventure Mode
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6ba451f07d64b8d419218e8af9b2982c, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: -1017190685336586639, guid: 6ba451f07d64b8d419218e8af9b2982c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3420,7 +3420,7 @@ MonoBehaviour:
   m_text: Multiplayer Mode
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6ba451f07d64b8d419218e8af9b2982c, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: -1017190685336586639, guid: 6ba451f07d64b8d419218e8af9b2982c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
