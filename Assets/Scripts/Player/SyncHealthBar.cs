@@ -35,6 +35,13 @@ public class SyncHealthBar : NetworkBehaviour
                     FindObjectOfType<GameManager>().OnGameDestroy += OnGameDestroy;
                     FindObjectOfType<GameManager>().OnLeaveGame += OnLeaveGame;
                     FindObjectOfType<GameManager>().OnRemovePlayerEvent += OnRemovePlayer;
+                    FindObjectOfType<GameManager>().OnDeSpawnPlayerEvent += DeSpawn;
+
+                    if (!IsServer)
+                    {
+                        CurrenPlayerData.Instance.Id = OwnerClientId;
+                        FindObjectOfType<SettingButtonController>().OnQuitButtonClicked += OnGameQuit;
+                    }
                     _setCallback = true;
                 }
                 m_HealControler.SetPlayerName(m_playerState.Name);
@@ -47,6 +54,16 @@ public class SyncHealthBar : NetworkBehaviour
     public void OnGameDestroy()
     {
         Destroy(gameObject);
+    }
+
+    public void DeSpawn(ulong clientId, Vector3 positon)
+    {
+        if (clientId != OwnerClientId) return;
+        transform.position = positon;
+
+        // reset player state
+        m_playerState.OnValueChange += OnPlayerStateChange;
+        m_playerState.Health = 100;
     }
 
     public void OnLeaveGame()
@@ -68,6 +85,11 @@ public class SyncHealthBar : NetworkBehaviour
         base.OnDestroy();
     }
 
+    public void OnGameQuit()
+    {
+        FindObjectOfType<GameManager>()?.OnRemovePlayer(OwnerClientId);
+    }
+
     public void OnDestroyPlayer()
     {
         if (m_playerState != null)
@@ -78,8 +100,9 @@ public class SyncHealthBar : NetworkBehaviour
         {
             m_PlayersTracking.RemovePlayer(OwnerClientId);
         }
+        //FindObjectOfType<SettingButtonController>().OnQuitButtonClicked -= OnGameQuit;
         //FindObjectOfType<GameManager>().OnRemovePlayerEvent -= OnRemovePlayer;
-        FindObjectOfType<GameManager>()?.OnRemovePlayer(OwnerClientId);
+        //FindObjectOfType<GameManager>()?.OnRemovePlayer(OwnerClientId);
     }
 
     private void PropagateToClients()

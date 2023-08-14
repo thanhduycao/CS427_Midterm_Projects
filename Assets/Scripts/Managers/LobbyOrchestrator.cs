@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Unity.Netcode;
-using Unity.Services.Authentication;
-using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -20,11 +18,6 @@ public class LobbyOrchestrator : NetworkBehaviour
 
     private void Start()
     {
-        if (GlobalVariable.Instance.OnReload)
-        {
-            Lobbies.Instance.RemovePlayerAsync(GlobalVariable.Instance.LobbyCode, CurrenPlayerData.Instance.Id.ToString());
-        }
-
         _mainLobbyScreen.gameObject.SetActive(GlobalVariable.Instance.OnReload);
         _createScreen.gameObject.SetActive(false);
         _roomScreen.gameObject.SetActive(false);
@@ -40,6 +33,7 @@ public class LobbyOrchestrator : NetworkBehaviour
         GlobalVariable.Instance.OnReload = false;
 
         CurrenPlayerData.Instance.Id = NetworkManager.Singleton.LocalClientId;
+        MatchmakingService._playersInLobby.Clear();
     }
 
     #region Main Lobby
@@ -53,7 +47,6 @@ public class LobbyOrchestrator : NetworkBehaviour
 
             _mainLobbyScreen.gameObject.SetActive(false);
             _roomScreen.gameObject.SetActive(true);
-
             NetworkManager.Singleton.StartClient();
         }
         catch (Exception e)
@@ -104,6 +97,7 @@ public class LobbyOrchestrator : NetworkBehaviour
         if (IsServer)
         {
             NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnectedCallback;
+            Debug.Log($"Host started lobby with id {NetworkManager.Singleton.LocalClientId}");
             MatchmakingService._playersInLobby.Add(NetworkManager.Singleton.LocalClientId, new PlayerData(NetworkManager.Singleton.LocalClientId));
             UpdateInterface();
         }
@@ -117,6 +111,7 @@ public class LobbyOrchestrator : NetworkBehaviour
         if (!IsServer) return;
 
         // Add locally
+        Debug.Log($"Client {playerId} joined the lobby");
         if (!MatchmakingService._playersInLobby.ContainsKey(playerId)) MatchmakingService._playersInLobby.Add(playerId, new PlayerData(NetworkManager.Singleton.LocalClientId));
 
         PropagateToClients();
@@ -199,12 +194,20 @@ public class LobbyOrchestrator : NetworkBehaviour
         MatchmakingService._playersInLobby.Clear();
         NetworkManager.Singleton.Shutdown();
         await MatchmakingService.LeaveLobby();
-        MatchmakingService.ResetStatics();
+        // MatchmakingService.ResetStatics();
         // }
+
+        // We only care about this during lobby
+        if (NetworkManager.Singleton != null)
+        {
+            NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnectCallback;
+            NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnectedCallback;
+            // NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnectCallback;
+        }
     }
 
     public void OnQuitClick()
-    { 
+    {
         Application.Quit();
     }
 
@@ -217,7 +220,6 @@ public class LobbyOrchestrator : NetworkBehaviour
     private void OnLobbyLeftClientRpc()
     {
         if (IsServer) return;
-        Debug.Log("=== Left Lobby ===");
         _createScreen.OnBackButton();
     }
 

@@ -1,3 +1,4 @@
+using System;
 using Unity.Netcode;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
@@ -11,6 +12,8 @@ public class SettingButtonController : MonoBehaviour
 
     private Button m_SettingButton;
     private SettingPanel settingPanel;
+
+    public Action OnQuitButtonClicked;
 
     void Start()
     {
@@ -43,6 +46,7 @@ public class SettingButtonController : MonoBehaviour
 
     private void OnQuitSetting()
     {
+        OnQuitButtonClicked?.Invoke();
         FindObjectOfType<GameManager>().OnGameQuit();
     }
 

@@ -57,14 +57,23 @@ public class MovementNoMana : NetworkBehaviour
 
             if (Input.GetKey(KeyCode.D))
             {
+                if (onLanded == true)
+                {
+                    SoundManager.instance.Play(SoundData.Sound.PlayerMove);
+                }
                 movement = movementSpeed;
             }
             if (Input.GetKey(KeyCode.A))
             {
+                if (onLanded == true)
+                {
+                    SoundManager.instance.Play(SoundData.Sound.PlayerMove);
+                }
                 movement = -movementSpeed;
             }
             if (Input.GetKeyDown(KeyCode.W))
             {
+                SoundManager.instance.Play(SoundData.Sound.PlayerJump);
                 if (extraJump > 0 && onLanded == false)
                 {
                     doubleJump = true;
@@ -181,6 +190,7 @@ public class MovementNoMana : NetworkBehaviour
             }
             KBCounter -= Time.deltaTime;
             animator.SetBool("isHit", true);
+            SoundManager.instance.Play(SoundData.Sound.PlayerHit);
         }
     }
 
