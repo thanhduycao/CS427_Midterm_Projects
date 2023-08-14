@@ -150,6 +150,9 @@ public class SoundManager : MonoBehaviour
     // Called when a new level is loaded.
     private void OnLevelWasLoaded(int level)
     {
+        Stop(SoundData.Sound.Scene1);
+        Stop(SoundData.Sound.Scene2);
+        Stop(SoundData.Sound.Scene3);
         InitializeButtonSound();
         // Play appropriate sounds based on the loaded level.
         switch (level)
