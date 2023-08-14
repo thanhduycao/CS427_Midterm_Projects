@@ -1,5 +1,12 @@
 # CS427 Midterm Project
 
+## Members
+
+- 20125014 - Thai Viet Nhat
+- 20125015 - Nguyen Phong Phu
+- 20125039 - Tran Minh Nam
+- 20125090 - Cao Thanh Duy
+
 ## Description
 
 This is the repository for the midterm project of CS427 course about 2D game development.
@@ -10,6 +17,11 @@ This is the repository for the midterm project of CS427 course about 2D game dev
 - Lobby 1.0.3
 - Relay 1.0.5
 - Netcode for GameObjects 1.5.2
+
+## Resources
+
+- [Pixel Adventure](https://pixelfrog-assets.itch.io/pixel-adventure-1) for characters, objects, tilesets, items, etc.
+- [Pixel Adventure 2](https://pixelfrog-assets.itch.io/pixel-adventure-2) for enemy characters.
 
 ## Acknowledgments
 
