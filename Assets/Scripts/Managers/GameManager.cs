@@ -356,9 +356,12 @@ public class GameManager : NetworkBehaviour
 
     private void ChangeScene()
     {
-        GlobalVariable.Instance.OnReload = true;
-        string sceneName = GlobalVariable.Instance.GameMode == 1 ? Constants.LobbyScene : Constants.MainMenu;
-        SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
+        if (GlobalVariable.Instance != null)
+        {
+            GlobalVariable.Instance.OnReload = true;
+            string sceneName = GlobalVariable.Instance.GameMode == 1 ? Constants.LobbyScene : Constants.MainMenu;
+            SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
+        }
         OnLeaveLobby();
     }
 

@@ -53,6 +53,7 @@ public class SyncHealthBar : NetworkBehaviour
 
     public void OnGameDestroy()
     {
+        if (gameObject != null)
         Destroy(gameObject);
     }
 
