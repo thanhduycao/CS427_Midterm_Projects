@@ -8,7 +8,10 @@ namespace DialogSystem
     {
         [SerializeField] GameObject dialogGameObject;
         [SerializeField] Image avatarImg;
-        [SerializeField] private Sprite forestSprite;
+        [SerializeField] private Sprite forestSprite, bossSprite;
+        [SerializeField] private bool isFinalRound = false;
+
+        public GameObject entropy;
 
         public MultipleLine conversationInJson = new MultipleLine();
 
@@ -29,6 +32,9 @@ namespace DialogSystem
                 } else if (line.speaker == "Forest")
                 {
                     avatarImg.sprite = forestSprite;
+                } else if (line.speaker == "Slime")
+                {
+                    avatarImg.sprite = bossSprite;
                 }
                 textHolder.text = string.Empty;
                 for (int i = 0; i < line.text.Length; ++i)
@@ -49,6 +55,10 @@ namespace DialogSystem
             }
             isProcessing = false;
             dialogGameObject.SetActive(false);
+            if (isFinalRound == true)
+            {
+                entropy.SetActive(true);
+            }
         }
 
         private void Update()
