@@ -39,7 +39,7 @@ public class EnemyController : MovementController
 
     private bool jump = false;
     private bool fall = false;
-    private bool hit = false;
+    // private bool hit = false;
     private bool onLanded = true;
     private int currentWaypoint = 0;
     private bool isGrounded = false;

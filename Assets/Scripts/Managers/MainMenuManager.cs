@@ -2,7 +2,6 @@ using Unity.Netcode;
 using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using QFSW.QC;
 
 public class MainMenuManager : MonoBehaviour
 {
@@ -50,21 +49,5 @@ public class MainMenuManager : MonoBehaviour
         GlobalVariable.Instance.GameMode = 0;
         NetworkManager.Singleton.StartHost();
         NetworkManager.Singleton.SceneManager.LoadScene(Constants.Rounds[0], LoadSceneMode.Single);
-    }
-
-    [Command("StartHost")]
-    public void StartHost(int screen = 0)
-    {
-        GlobalVariable.Instance.GameMode = 0;
-        NetworkManager.Singleton.StartHost();
-        NetworkManager.Singleton.SceneManager.LoadScene(Constants.Rounds[screen], LoadSceneMode.Single);
-    }
-    
-    [Command("StartClient")]
-    public void StartClient(int screen = 0)
-    {
-        GlobalVariable.Instance.GameMode = 0;
-        NetworkManager.Singleton.StartClient();
-        NetworkManager.Singleton.SceneManager.LoadScene(Constants.Rounds[screen], LoadSceneMode.Single);
     }
 }

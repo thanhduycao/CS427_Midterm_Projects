@@ -140,7 +140,7 @@ public static class MatchmakingService
                 else await Lobbies.Instance.RemovePlayerAsync(_currentLobby.Id, Authentication.PlayerId);
                 _currentLobby = null;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 // Debug.Log(e);
             }
