@@ -190,12 +190,10 @@ public class LobbyOrchestrator : NetworkBehaviour
     private async void OnLobbyLeft()
     {
         if (IsServer) OnLobbyLeftClientRpc();
-        // using (new Load("Leaving Lobby...")) {
         MatchmakingService._playersInLobby.Clear();
+        //if (NetworkManager.Singleton != null) 
         NetworkManager.Singleton.Shutdown();
         await MatchmakingService.LeaveLobby();
-        // MatchmakingService.ResetStatics();
-        // }
 
         // We only care about this during lobby
         if (NetworkManager.Singleton != null)
@@ -248,7 +246,7 @@ public class LobbyOrchestrator : NetworkBehaviour
     private async void OnGameStart()
     {
         // using (new Load("Starting the game...")) {
-        // await MatchmakingService.LockLobby();
+        await MatchmakingService.LockLobby();
         NetworkManager.Singleton.SceneManager.LoadScene(Constants.Rounds[_lobby.Round], LoadSceneMode.Single);
         GlobalVariable.Instance.Round = _lobby.Round;
         // }

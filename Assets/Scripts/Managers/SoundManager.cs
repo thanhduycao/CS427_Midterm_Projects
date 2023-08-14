@@ -10,43 +10,53 @@ public class SoundManager : MonoBehaviour
     public SoundData[] sounds;
     private static Dictionary<SoundData.Sound, float> soundTimerDictionary;
     [SerializeField] private AudioSource backgroundSource;
+    private List<AudioSource> musicSource = new List<AudioSource>();
+    private List<AudioSource> sfxSource = new List<AudioSource>();
+    private float _musicVolume = 1;
+    private float _sfxVolume = 1;
 
     public static SoundManager instance
     {
-        get
-        {
-            return _instance;
-        }
+        get; private set;
     }
 
     private void Awake()
     {
-        if (_instance != null && _instance != this)
+        if (instance != null)
         {
             Destroy(this.gameObject);
         }
         else
         {
-            _instance = this;
-        }
-        DontDestroyOnLoad(this.gameObject);
+            instance = this;
+            DontDestroyOnLoad(this.gameObject);
+            soundTimerDictionary = new Dictionary<SoundData.Sound, float>();
 
-        soundTimerDictionary = new Dictionary<SoundData.Sound, float>();
-
-        foreach (SoundData sound in sounds)
-        {
-            
-            sound.source = gameObject.AddComponent<AudioSource>();
-            sound.source.clip = sound.audioClip;
-
-            sound.source.volume = sound.volume;
-            sound.source.pitch = sound.pitch;
-            sound.source.loop = sound.isLoop;
-
-            if (sound.hasCooldown)
+            foreach (SoundData sound in sounds)
             {
-                Debug.Log(sound.sound);
-                soundTimerDictionary[sound.sound] = 0f;
+                if (sound.source == null)
+                {
+                    sound.source = gameObject.AddComponent<AudioSource>();
+                }
+                sound.source.clip = sound.audioClip;
+
+                sound.source.volume = sound.volume;
+                sound.source.pitch = sound.pitch;
+                sound.source.loop = sound.isLoop;
+
+                if (sound.hasCooldown)
+                {
+                    Debug.Log(sound.sound);
+                    soundTimerDictionary[sound.sound] = 0f;
+                }
+                if (sound.isMusicSound == true)
+                {
+                    musicSource.Add(sound.source);
+                }
+                else
+                {
+                    sfxSource.Add(sound.source);
+                }
             }
         }
     }
@@ -142,5 +152,50 @@ public class SoundManager : MonoBehaviour
             button.onClick.AddListener(() => Play(SoundData.Sound.ButtonClick));
         }
 
+    }
+
+    public void ToggleMusic()
+    {
+        foreach (AudioSource source in musicSource)
+        {
+            source.mute = !source.mute;
+            Debug.Log(source.mute);
+        }
+    }
+
+    public void ToggleSFX()
+    {
+        foreach (AudioSource source in sfxSource)
+        {
+            source.mute = !source.mute;
+        }
+    }
+
+    public void ChangeMusicVolume(float volume)
+    {
+        _musicVolume = volume;
+        foreach (AudioSource source in musicSource)
+        {
+            source.volume = volume;
+        }
+    }
+
+    public void ChangeSFXVolume(float volume)
+    {
+        _sfxVolume = volume;
+        foreach (AudioSource source in sfxSource)
+        {
+            source.volume = volume;
+        }
+    }
+
+    public float GetMusicVolume()
+    {
+        return _musicVolume;
+    }
+
+    public float GetSFXVolume()
+    {
+        return _sfxVolume;
     }
 }

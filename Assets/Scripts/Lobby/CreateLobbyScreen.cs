@@ -17,7 +17,7 @@ public class CreateLobbyScreen : MonoBehaviour
     private void OnEnable()
     {
         _createButton.interactable = true;
-        _maxPlayersInput.text = "2";
+        _maxPlayersInput.text = "5";
         _nameInput.text = NVJOBNameGen.Uppercase(NVJOBNameGen.GiveAName(7));
 
         SetOptions(_roundDropdown, Constants.Rounds);
